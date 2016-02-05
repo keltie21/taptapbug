@@ -1,7 +1,7 @@
 // Painting one bug with x, y being left top corner
-    function makeBug(x, y){
+    function makeBug(x, y, colour){
         
-        color = "green";
+        color = colour; 
         alpha = ".5";
         
         //http://www.w3schools.com/tags/canvas_globalalpha.asp
