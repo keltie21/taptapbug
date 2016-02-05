@@ -1,10 +1,10 @@
 // Painting one bug with x, y being left top corner
-function makeBug( ctxt, x, y, colour){
-    color = colour; 
-    alpha = ".5";
-    context = ctxt;  
+function makeBug( context, x, y, color, angle){
+ 
+    alpha = ".5"; 
     //http://www.w3schools.com/tags/canvas_globalalpha.asp
     context.globalAlpha = alpha;
+
       
     /*-- Whiskers, legs and arms--*/
     context.beginPath();
