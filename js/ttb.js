@@ -2,10 +2,8 @@ function drawStartCanvas()
 {
 	var canvas = document.getElementById('game-screen');
 	var context = canvas.getContext('2d');
-	_grid(context);
-    makeBug(context, 150, 50, "orange", 300);
-    makeBug(context, 50, 50, "black", 0);
-    makeBug(context, 250, 50, "green", 45);
+	//_grid(context);
+    window.requestAnimationFrame(drawFrame);
     spawnFood(canvas, context);
 }
 
@@ -15,6 +13,35 @@ function spawnFood(canvas, context) {
         var y = Math.floor(Math.random() * (canvas.height - 200) + 150);
         addFood(context, x, y);
     }
+}
+var startTime = -1;
+var animationLength = 2000;
+function drawFrame(timestamp)
+{
+	
+	var progress = 0;
+	var canvas = document.getElementById('game-screen');
+	var context = canvas.getContext('2d');
+	context.clearRect(0,0,400,600);
+
+	if (startTime < 0)
+	{
+		startTime = timestamp;
+	}
+	else
+	{
+		progress = timestamp - startTime;
+	}
+
+	if (progress < animationLength) 
+	{
+      window.requestAnimationFrame(drawFrame);
+  	}
+	//makeBug(context, 150, 50, "orange", 300);
+    makeBug(context, 50, (timestamp / 5 ), "black", 0);
+    //makeBug(context, 250, 50, "green", 45);
+
+	
 }
 
 //overlays a grid on the screen, for debug purposes
