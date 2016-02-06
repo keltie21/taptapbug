@@ -94,6 +94,7 @@ function makeBug( context, x, y, color, angle){
     context.fill();
     context.beginPath();
     context.arc(5, 15, 2.5, 0, Math.PI, false);
+    context.strokeStyle = "white";
     context.stroke();
     
     // restore context angle
