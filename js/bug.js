@@ -1,7 +1,7 @@
 // Painting one bug with x, y being left top corner
 function makeBug( context, x, y, color, angle){
     
-    alpha = ".5"; 
+    alpha = "1.0"; 
     context.globalAlpha = alpha;
     
     //global(ish), pulled from bug drawing sequence
