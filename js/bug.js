@@ -13,87 +13,81 @@ function makeBug( context, x, y, color, angle){
     
     context.save();
     
-    context.translate( x , y); // center on bug
+    context.translate( x + (bugWidth/2), y +(bugHeight/2)); // center on bug
+    
     console.log(context);
     context.rotate(radians); // rotate context
-    
-    //context.fillStyle = 'blue';
-    //context.fillRect(25, 25, 50, 50);
-    //context.restore();
-    // console.log(context);
-    // console.log(x);
-    // console.log(y);
-    // console.log(color);
+    context.translate( bugWidth / -2, bugHeight /-2);
+    //context.fillStyle="blue";
+    //context.fillRect(0,0,10,40);
 
-    context.fillStyle="blue";
-    context.fillRect(x,y,10,40);
     /*-- Whiskers, legs and arms--*/
     context.beginPath();
-    context.moveTo(x,y);
-    context.lineTo(x+5, y+15);
-    context.lineTo(x+10, y);
-    context.moveTo(x+5, y+20);
-    context.lineTo(x+4, y+22);
-    context.lineTo(x+6, y+22);
-    context.lineTo(x+5, y+20);
-    context.moveTo(x, y+20);
-    context.lineTo(x+10, y+40);
-    context.moveTo(x+10, y+20);
-    context.lineTo(x, y+40);
+    context.moveTo(0,0);
+    context.lineTo(5, 15);
+    context.lineTo(10, 0);
+    context.moveTo(5, 20);
+    context.lineTo(4, 22);
+    context.lineTo(6, 22);
+    context.lineTo(5, 20);
+    context.moveTo(0, 20);
+    context.lineTo(10, 40);
+    context.moveTo(10, 20);
+    context.lineTo(0, 40);
     context.lineWidth = 2;
     context.strokeStyle = color;
     context.stroke(); //na
 
-    /*-- Triangles on the tips --*
-    context.moveTo(x,y);
-    context.lineTo(x, y+3);
-    context.lineTo(x+1.73, y+2.4);
-    context.lineTo(x, y);
-    context.moveTo(x+10, y);
-    context.lineTo(x+8.27, y+2.4);
-    context.lineTo(x+10, y+3);
-    context.lineTo(x+10, y);
-    context.moveTo(x, y+20);
-    context.lineTo(x, y+22);
-    context.lineTo(x+1.6, y+21.25);
-    context.lineTo(x, y+22);
-    context.moveTo(x+10, y+20);
-    context.lineTo(x+8.4, y+21.25);
-    context.lineTo(x+10, y+22);
-    context.lineTo(x+10, y+20);
-    context.moveTo(x, y+40);
-    context.lineTo(x, y+38);
-    context.lineTo(x+1.6, y+38.25);
-    context.lineTo(x, y+38);
-    context.moveTo(x+10, y+40);
-    context.lineTo(x+8.4, y+38.25);
-    context.lineTo(x+10, y+38);
-    context.lineTo(x+10, y+40);
+    /*-- Triangles on the tips --*/
+    context.moveTo(0,0);
+    context.lineTo(0, 3);
+    context.lineTo(1.73, 2.4);
+    context.lineTo(0, 0);
+    context.moveTo(10, 0);
+    context.lineTo(8.27, 2.4);
+    context.lineTo(10, 3);
+    context.lineTo(10, 0);
+    context.moveTo(0, 20);
+    context.lineTo(0, 22);
+    context.lineTo(1.6, 21.25);
+    context.lineTo(0, 22);
+    context.moveTo(10, 20);
+    context.lineTo(8.4, 21.25);
+    context.lineTo(10, 22);
+    context.lineTo(10, 20);
+    context.moveTo(0, 40);
+    context.lineTo(0, 38);
+    context.lineTo(1.6, 38.25);
+    context.lineTo(0, 38);
+    context.moveTo(10, 40);
+    context.lineTo(8.4, 38.25);
+    context.lineTo(10, 38);
+    context.lineTo(10, 40);
     context.stroke();
 
-    /*-- Body parts --*    
+    /*-- Body parts --*/    
     context.beginPath();
-    context.arc(x+5, y+15, 5, 0, 2*Math.PI);
-    context.moveTo(x+5, y+21);
-    context.bezierCurveTo(x, y+20, x, y+30, x+5, y+38.75);
-    context.moveTo(x+5, y+21);	
-    context.bezierCurveTo(x+10, y+20, x+10, y+30, x+5, y+38.75);
+    context.arc(5, 15, 5, 0, 2*Math.PI);
+    context.moveTo(5, 21);
+    context.bezierCurveTo(0, 20, 0, 30, 5, 38.75);
+    context.moveTo(5, 21);	
+    context.bezierCurveTo(10, 20, 10, 30, 5, 38.75);
     context.fillStyle = color;
     context.lineWidth = 1;
     context.strokeStyle = "#000000"
     context.stroke();
     context.fill();
 
-    /*-- Eyes and Mouth --*
+    /*-- Eyes and Mouth --*/
     context.beginPath();
-    context.arc(x+3.3, y+13.2, 1, 0, 2*Math.PI);
-    context.arc(x+6.75, y+13.2, 1, 0, 2*Math.PI);
+    context.arc(3.3, 13.2, 1, 0, 2*Math.PI);
+    context.arc(6.75, 13.2, 1, 0, 2*Math.PI);
     context.fillStyle = "white";
     context.fill();
     context.beginPath();
-    context.arc(x+5, y+15, 2.5, 0, Math.PI, false);
+    context.arc(5, 15, 2.5, 0, Math.PI, false);
     context.stroke();
-    */
+    
     // restore angle
     context.restore();
     
