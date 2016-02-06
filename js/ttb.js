@@ -3,10 +3,9 @@ function drawStartCanvas()
 	var canvas = document.getElementById('game-screen');
 	var context = canvas.getContext('2d');
 	_grid(context);
-    //makeBug(context, 50, 50, "orange", 300);
+    makeBug(context, 150, 50, "orange", 300);
     makeBug(context, 50, 50, "black", 0);
-    //makeBug(context, 150, 50, "black");
-    //makeBug(context, 250, 50, "green");
+    makeBug(context, 250, 50, "green", 45);
 }
 
 //overlays a grid on the screen, for debug purposes

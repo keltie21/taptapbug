@@ -11,13 +11,21 @@ function makeBug( context, x, y, color, angle){
     // angle the bug (facing proper direction)
     radians = ((angle * Math.PI) / 180);
     
+    // save context pre-rotate
     context.save();
     
-    context.translate( x + (bugWidth/2), y +(bugHeight/2)); // center on bug
+    // center on bug's center point (so rotate is clean)
+    context.translate( x + (bugWidth/2), y +(bugHeight/2)); 
     
-    console.log(context);
-    context.rotate(radians); // rotate context
+    //console.log(context);
+
+    // rotate context
+    context.rotate(radians); 
+
+    // move context back to top left to draw the bug
     context.translate( bugWidth / -2, bugHeight /-2);
+    
+    //rectangle helpful for positioning
     //context.fillStyle="blue";
     //context.fillRect(0,0,10,40);
 
@@ -88,7 +96,7 @@ function makeBug( context, x, y, color, angle){
     context.arc(5, 15, 2.5, 0, Math.PI, false);
     context.stroke();
     
-    // restore angle
+    // restore context angle
     context.restore();
     
 }
