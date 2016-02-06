@@ -6,6 +6,15 @@ function drawStartCanvas()
     makeBug(context, 150, 50, "orange", 300);
     makeBug(context, 50, 50, "black", 0);
     makeBug(context, 250, 50, "green", 45);
+    spawnFood(canvas, context);
+}
+
+function spawnFood(canvas, context) {
+    for (i = 0; i < 5; i++) {
+        var x = Math.floor(Math.random() * (canvas.width - 100) + 50);
+        var y = Math.floor(Math.random() * (canvas.height - 200) + 150);
+        addFood(context, x, y);
+    }
 }
 
 //overlays a grid on the screen, for debug purposes
