@@ -1,5 +1,5 @@
 // bug class
-var Bug = function (x,y,colour, direction)
+var Bug = function (x, y, colour, direction)
 {
     this.x = x;
     this.y = y;
@@ -7,8 +7,9 @@ var Bug = function (x,y,colour, direction)
     this.direction = direction
 
     // Painting one bug with x, y being left top corner
-    this.makeBug = function ( context, x, y, color, angle){
+    this.makeBug = function ( context ){
     
+        console.log("inbug: " + this.direction);
         alpha = "1.0"; 
         context.globalAlpha = alpha;
     
@@ -17,8 +18,9 @@ var Bug = function (x,y,colour, direction)
         bugHeight = 40;
 
         // angle the bug (facing proper direction)
-        radians = ((angle * Math.PI) / 180);
+        //radians = (direction * Math.PI) / 180;
     
+        radians = this.direction + Math.PI/4;
         // save context pre-rotate
         context.save();
     
@@ -51,7 +53,7 @@ var Bug = function (x,y,colour, direction)
         context.moveTo(10, 20);
         context.lineTo(0, 40);
         context.lineWidth = 2;
-        context.strokeStyle = color;
+        context.strokeStyle = colour;
         context.stroke(); //na
 
         /*-- Triangles on the tips --*/
@@ -88,7 +90,7 @@ var Bug = function (x,y,colour, direction)
         context.bezierCurveTo(0, 20, 0, 30, 5, 38.75);
         context.moveTo(5, 21);	
         context.bezierCurveTo(10, 20, 10, 30, 5, 38.75);
-        context.fillStyle = color;
+        context.fillStyle = colour;
         context.lineWidth = 1;
         context.strokeStyle = "#000000"
         context.stroke();
