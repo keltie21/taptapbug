@@ -20,7 +20,7 @@ var Bug = function (x, y, colour, direction)
         // angle the bug (facing proper direction)
         //radians = (direction * Math.PI) / 180;
     
-        radians = this.direction + Math.PI/4;
+        radians = this.direction - Math.PI/2;
         // save context pre-rotate
         context.save();
     
