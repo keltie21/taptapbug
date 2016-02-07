@@ -98,5 +98,13 @@ function makeBug( context, x, y, color, angle){
     
     // restore context angle
     context.restore();
+
+    //http://stackoverflow.com/questions/20814883/add-an-event-listener-to-a-drawn-object-on-html5-canvas
+    this.checkPosition = function (x, y, r){
+        var dx = x - this.x;
+        var dy = y - this.y;
+        if (dx * dx + dy * dy <= r * r)
+            makeBug(context, x, y, "green", 0);
+    }
     
 }

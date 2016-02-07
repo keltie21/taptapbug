@@ -2,19 +2,27 @@ function drawStartCanvas()
 {
 	var canvas = document.getElementById('game-screen');
 	var context = canvas.getContext('2d');
+	canvas.addEventListener("mousedown", getPosition, false);
 	_grid(context);
-    makeBug(context, 150, 50, "orange", 300);
-    makeBug(context, 50, 50, "black", 0);
-    makeBug(context, 250, 50, "green", 45);
-    spawnFood(canvas, context);
+    var a = makeBug(context, 150, 50, "orange", 300);
+    var b = makeBug(context, 50, 50, "black", 0);
+    var c = makeBug(context, 250, 50, "red", 45);
+    var fruits = new Array();
+    spawnFood(canvas, context, fruits);
 }
 
-function spawnFood(canvas, context) {
+function spawnFood(canvas, context, lst) {
     for (i = 0; i < 5; i++) {
         var x = Math.floor(Math.random() * (canvas.width - 100) + 50);
         var y = Math.floor(Math.random() * (canvas.height - 200) + 150);
-        addFood(context, x, y);
+        lst.push(addFood(context, x, y));
     }
+}
+
+function getPosition(event) {
+    var x = event.offsetX;
+    var y = event.offsetY;
+    a.checkPosition(x, y, 30);
 }
 
 //overlays a grid on the screen, for debug purposes
