@@ -22,11 +22,12 @@ function drawStartCanvas()
     var bug1 = new Bug (50, 50, "green", 45);
     var bugs = [bug1];
     bugs.push(new Bug (100, 100, "orange", 22));
+    
     foods = spawnFood(canvas);
 
     console.log("Bug 1: "+bugs[0].direction);
     console.log("Bug 2: "+bugs[1].direction);
-    checkDirections(bugs, foods, context);
+    checkDirections(bugs, foods);
     console.log("Bug 1: "+bugs[0].direction);
     console.log("Bug 2: "+bugs[1].direction);
     for (i = 0; i < foods.length; i++)
@@ -40,7 +41,7 @@ function drawStartCanvas()
 }
 
 // check what direction the bugs are supposed to be heading, and redirect them as needed
-function checkDirections(bugs, foods, context)
+function checkDirections(bugs, foods)
 {
 	var a,b,c; // a^2 + b^2 = c^2 ... pythagoras yo
 	var dX, dY; // deltaX and deltaY for slope calculation
@@ -61,12 +62,12 @@ function checkDirections(bugs, foods, context)
 				min[i] = [c, j];
 			}			
 		}
-		//console.log("min: "+min[i][0] +" num "+min[i][1]);
+
 		// now get the slope y = mx +b
+		dY = (bugs[i].y + 20) - (foods[min[i][1]].y + 25);  // these offsets should probably
+		dX = (bugs[i].x + 5) - (foods[min[i][1]].x + 25);	// be variables...
 
-		dY = bugs[i].y - foods[min[i][1]].y;
-		dX = bugs[i].x - foods[min[i][1]].x;
-
+		/*debug stuff here... can be removed later
 		context.beginPath();
         context.moveTo(bugs[i].x + 5, bugs[i].y + 20);
         context.lineTo(foods[min[i][1]].x + 25, foods[min[i][1]].y + 25);
@@ -74,15 +75,9 @@ function checkDirections(bugs, foods, context)
         context.lineWidth = 2;
         context.strokeStyle = "black";
         context.stroke(); //na
-
-		slope = dY / dX;
-
-		console.log("slope: " + slope);
-		console.log("atan2: " + Math.atan2(dY, dX));
-		//console.log(Math.atan(.2));
-		console.log("pre  : " + bugs[i].direction);
+		*/
 		bugs[i].direction = Math.atan2(dY, dX ); //angle the bug
-		console.log("post :"+bugs[i].direction);
+
 	}
 }
 
