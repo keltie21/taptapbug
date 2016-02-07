@@ -104,11 +104,16 @@ var Bug = function (x, y, colour, direction)
         context.fill();
         context.beginPath();
         context.arc(5, 15, 2.5, 0, Math.PI, false);
-        context.strokeStyle = "white";
         context.stroke();
-        
+    
         // restore context angle
         context.restore();
-        
+    }
+    //http://stackoverflow.com/questions/20814883/add-an-event-listener-to-a-drawn-object-on-html5-canvas
+    this.checkPosition = function (x, y, r){
+        var dx = x - this.x;
+        var dy = y - this.y;
+        if (dx * dx + dy * dy <= r * r)
+            makeBug(context, x, y, "green", 0);
     }
 }

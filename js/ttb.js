@@ -1,20 +1,15 @@
-function main()
-{
-	// get current time
-	gamelength = 10000; // total game time
-	gameStart = Date.now();
-	console.log (gameStart);
-	//var bug1 = new Bug!
+//var a = makeBug(context, 150, 50, "orange", 300);
 
-
-	// set as 0
-	// loop
-}
-// init function
 function drawStartCanvas()
 {
 	var canvas = document.getElementById('game-screen');
 	var context = canvas.getContext('2d');
+
+	canvas.addEventListener("mousedown", getPosition, false);
+	var bugs = new Array();
+	var foods = new Array();
+	//spawnFood(canvas, context, fruits);
+	setInfo();
 	//_grid(context);
     //window.requestAnimationFrame(drawFrame);
     //spawnFood(canvas, context);
@@ -24,6 +19,7 @@ function drawStartCanvas()
     bugs.push(new Bug (100, 100, "orange", 22));
     
     foods = spawnFood(canvas);
+    console.log(foods[1]);
 
     console.log("Bug 1: "+bugs[0].direction);
     console.log("Bug 2: "+bugs[1].direction);
@@ -86,9 +82,9 @@ function spawnFood(canvas) {
     for (i = 0; i < 5; i++) {
         var x = Math.floor(Math.random() * (canvas.width - 100) + 50);
         var y = Math.floor(Math.random() * (canvas.height - 200) + 150);
-        foods.push(new Food(x,y));    
+        foods.push(new Food( x, y ));
     }
-    return foods; 
+    return foods;
 }
 
 // this function will redraw the screen
@@ -107,6 +103,13 @@ function drawFrame(timestamp)
 function moveBugs( bug, context, animationStartTime)
 {
 	//for
+}
+
+function getPosition(event) {
+    var x = event.offsetX;
+    var y = event.offsetY;
+    makeBug(context, x, y, "green", 0);
+    //a.checkPosition(x, y, 30);
 }
 
 //overlays a grid on the screen, for debug purposes
