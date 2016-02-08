@@ -1,4 +1,4 @@
-var canvas;
+var canvas = new Object();
 var bugs = new Array();
 var foods = new Array();
 //var context = canvas.getContext('2d');
@@ -10,10 +10,11 @@ function drawStartCanvas()
 {
 	canvas = document.getElementById('game-screen');
 	context = canvas.getContext('2d');
-	bugs = new Array();
-	foods = new Array();
+	//bugs = new Array();
+	//foods = new Array();
 
-	canvas.addEventListener("mousedown", function(){getPosition(bugs, foods )}, false);
+	canvas.addEventListener("mousedown", getPosition, false);
+	//canvas.addEventListener("mousedown", function(){getPosition(bugs, foods )}, false);
 	setInfo();
 
     bugs.push(new Bug (50, 50, "red", 45));
@@ -38,7 +39,23 @@ function drawStartCanvas()
 }
 
 function getPosition(event) {
+    drawFrame();
+
     var x = event.offsetX;
+    var y = event.offsetY;
+    //test = new Bug(x, y, "green", 0);
+    //test.makeBug(context);
+    console.log(bugs.length);
+    for (i = 0; i < bugs.length; i++) {
+        var hit = bugs[i].checkPosition(x, y, 30);
+        if (!hit)
+            // http://www.w3schools.com/jsref/jsref_splice.asp
+            bugs.splice(i, 1);
+    }
+}
+
+/*canvas.onmousedown = function (event) {
+   var x = event.offsetX;
     var y = event.offsetY;
     //test = new Bug(x, y, "green", 0);
     //test.makeBug(context);
@@ -46,12 +63,6 @@ function getPosition(event) {
     for (i = 0; i < bugs.length; i++) {
         bugs[i].checkPosition(x, y, 30);
     }
-}
-
-/*canvas.onmousedown = function () {
-    var x = event.offsetX;
-    var y = event.offsetY;
-    makeBug(context, x, y, "green", 0);
 }*/
 
 // check what direction the bugs are supposed to be heading, and redirect them as needed
@@ -146,7 +157,7 @@ function checkCollision(bug,food)
 	//var deltaY = Math.abs((foods[food].y + 25) - (bugs[bug].y - 20));
 
 }
-function getPosition() {
+/*function getPosition() {
 
     var x = event.offsetX;
     var y = event.offsetY;
@@ -154,7 +165,7 @@ function getPosition() {
     // this is not where this goes.
     // only here now for debug
     drawFrame();
-}
+}*/
 
 
 

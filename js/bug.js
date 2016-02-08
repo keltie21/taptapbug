@@ -4,7 +4,8 @@ var Bug = function (x, y, colour, direction)
     this.x = x;
     this.y = y;
     this.colour = colour;
-    this.direction = direction
+    this.direction = direction;
+    this.active = false;
     // speed is based on colour
     switch(colour)
     {
@@ -113,12 +114,18 @@ var Bug = function (x, y, colour, direction)
     
         // restore context angle
         context.restore();
+
+        this.active = true;
     }
     //http://stackoverflow.com/questions/20814883/add-an-event-listener-to-a-drawn-object-on-html5-canvas
     this.checkPosition = function (x, y, r){
         var dx = x - this.x;
         var dy = y - this.y;
-        if (dx * dx + dy * dy <= r * r)
-            console.log("Click");
+        if (dx * dx + dy * dy <= r * r && this.active) {
+            addScore(this.colour);
+            console.log("Click: " + score);
+            this.active = false;
+        }
+        return this.active;
     }
 }
