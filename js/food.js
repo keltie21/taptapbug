@@ -4,8 +4,8 @@ var Food = function (x,y)
 	this.x = x;
 	this.y = y;
 
-	this.addFood = function (cntxt) {
-    	context = cntxt;
+	this.addFood = function () {
+    	
     	context.fillStyle = "blue";
     	context.fillRect(this.x, this.y, 50, 50);
     	//http://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas

@@ -1,5 +1,3 @@
-//var a = makeBug(context, 150, 50, "orange", 300);
-
 function drawStartCanvas()
 {
 	canvas = document.getElementById('game-screen');
@@ -7,31 +5,25 @@ function drawStartCanvas()
 	bugs = new Array();
 	foods = new Array();
 
-	canvas.addEventListener("mousedown", function(){getPosition(context, bugs, foods )}, false);
-	//spawnFood(canvas, context, fruits);
+	canvas.addEventListener("mousedown", function(){getPosition(bugs, foods )}, false);
 	setInfo();
-	//_grid(context);
-    //window.requestAnimationFrame(drawFrame);
-    //spawnFood(canvas, context);
-    //main();
-    bugs.push(new Bug (50, 50, "green", 45));
-    bugs.push(new Bug (300, 300, "orange", 22));
-    
-    foods = spawnFood(canvas);
-    //console.log(foods[1]);
 
-    //console.log("Bug 1: "+bugs[0].direction);
-    //console.log("Bug 2: "+bugs[1].direction);
+    bugs.push(new Bug (50, 50, "red", 45));
+    bugs.push(new Bug (300, 300, "orange", 22));
+    bugs.push(new Bug (150, 450, "black", 44));
+    
+
+    foods = spawnFood();
+
     checkDirections();
-    //console.log("Bug 1: "+bugs[0].direction);
-    // console.log("Bug 2: "+bugs[1].direction);
+
     for (i = 0; i < foods.length; i++)
     {
-    	foods[i].addFood(context);
+    	foods[i].addFood();
     }
     for (i = 0; i < bugs.length; i++)
     {
-    	bugs[i].makeBug(context);
+    	bugs[i].makeBug();
     }
 }
 
@@ -62,16 +54,8 @@ function checkDirections()
 		dY = (bugs[i].y + 20) - (foods[min[i][1]].y + 25);  // these offsets should probably
 		dX = (bugs[i].x + 5) - (foods[min[i][1]].x + 25);	// be variables...
 
-		/*debug stuff here... can be removed later
-		context.beginPath();
-        context.moveTo(bugs[i].x + 5, bugs[i].y + 20);
-        context.lineTo(foods[min[i][1]].x + 25, foods[min[i][1]].y + 25);
-        
-        context.lineWidth = 2;
-        context.strokeStyle = "black";
-        context.stroke(); //na
-		*/
-		bugs[i].direction = Math.atan2(dY, dX ); //angle the bug
+		// angle the bug
+		bugs[i].direction = Math.atan2(dY, dX); 
 
 	}
 }
@@ -85,7 +69,7 @@ function moveBugs()
 		bugs[i].y -= Math.sin(bugs[i].direction) * bugs[i].speed;
 	}
 }
-function spawnFood(canvas) {
+function spawnFood() {
 	var foods = [];
     for (i = 0; i < 5; i++) {
         var x = Math.floor(Math.random() * (canvas.width - 100) + 50);
@@ -99,49 +83,35 @@ function spawnFood(canvas) {
 function drawFrame(timestamp)
 {
 	context.clearRect(0,0,400,600);
-	moveBugs();
+    checkDirections();
+    moveBugs();
+
 	for (i = 0; i < foods.length; i++)
     {
-    	foods[i].addFood(context);
+    	foods[i].addFood();
     }
     for (i = 0; i < bugs.length; i++)
     {
-    	bugs[i].makeBug(context);
+    	console.log(bugs[i].y);
+    	bugs[i].makeBug();
     }
-
-	//makeBug(context, 150, 50, "orange", 300);
-    //makeBug(context, 50, (timestamp / 5 ), "black", 0);
-    //makeBug(context, 250, 50, "green", 45);
-    window.requestAnimationFrame(drawFrame)
-
+    window.requestAnimationFrame(drawFrame);
 	
 }
 
-function getPosition(context, bugs, foods) {
+function getPosition() {
 
 	//console.log("ding " + bugs);
 
     var x = event.offsetX;
     var y = event.offsetY;
 
-    
-    context.clearRect(0,0,400,600);
-    checkDirections();
-    moveBugs();
+    drawFrame();
 
-	for (i = 0; i < foods.length; i++)
-    {
-    	foods[i].addFood(context);
-    }
-    for (i = 0; i < bugs.length; i++)
-    {
-    	console.log(bugs[i].y);
-    	bugs[i].makeBug(context);
-    }
 }
 
 //overlays a grid on the screen, for debug purposes
-function _grid(context)
+function _grid()
 {
 	for (i = 0; i < 600; i = i + 10)
 	{
