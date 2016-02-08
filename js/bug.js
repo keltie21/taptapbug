@@ -5,11 +5,13 @@ var Bug = function (x, y, colour, direction)
     this.y = y;
     this.colour = colour;
     this.direction = direction
+    this.speed = 10;
+    this.steps = 0;
 
     // Painting one bug with x, y being left top corner
     this.makeBug = function ( context ){
     
-        console.log("inbug: " + this.direction);
+        console.log("inbug: " + this.y);
         alpha = "1.0"; 
         context.globalAlpha = alpha;
     
@@ -25,12 +27,18 @@ var Bug = function (x, y, colour, direction)
         context.save();
     
         // center on bug's center point (so rotate is clean)
-        context.translate( x + (bugWidth/2), y +(bugHeight/2)); 
+        console.log("transltate " + (this.x + (bugWidth/2)) + " " + (this.y +(bugHeight/2)));
+        
+        context.translate( this.x + (bugWidth/2), this.y +(bugHeight/2)); 
         
         //console.log(context);
 
         // rotate context
         context.rotate(radians); 
+
+        // step the bug forward
+        context.translate(0,this.speed*this.steps*-1);
+        this.steps++;
 
         // move context back to top left to draw the bug
         context.translate( bugWidth / -2, bugHeight /-2);
@@ -103,6 +111,7 @@ var Bug = function (x, y, colour, direction)
         context.fillStyle = "white";
         context.fill();
         context.beginPath();
+        context.strokeStyle = "white";
         context.arc(5, 15, 2.5, 0, Math.PI, false);
         context.stroke();
     
