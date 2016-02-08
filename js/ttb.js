@@ -77,15 +77,19 @@ function checkDirections()
 				min[i] = [c, j];
 				//checkCollision(i, min[i][1]); // its more efficient to call this here/////
 			}
+			
 			 	
 		}
 
 		// now get the slope y = mx +b
 		dY = (bugs[i].y + 20) - (foods[min[i][1]].y + 25);  // these offsets should probably
 		dX = (bugs[i].x + 5) - (foods[min[i][1]].x + 25);	// be variables...
-
+		
 		// angle the bug
 		bugs[i].direction = Math.atan2(dY, dX); 
+
+		// see if this bug (i) is touching its closest food
+		checkCollision(i,min[i]);
 
 	}
 }
@@ -122,14 +126,7 @@ function drawFrame(timestamp)
 	context.clearRect(0,0,400,600); //wipe screen
     checkDirections(); //adjust direction to nearest food
     moveBugs();  //move the bugs
-    for (i = 0; i < foods.length; i++)
-    {
-    	for (j = 0; j< bugs.length; j++)
-    	{
-    		checkCollision(j,i)
-    	}
-    }
-    //checkCollision(); //see if bug has food
+    
 
 	for (i = 0; i < foods.length; i++)
     {
@@ -144,11 +141,10 @@ function drawFrame(timestamp)
 	
 }
 
-// check for collision between bug (rectancle) and food (circle)
-// adapted from ideas on http://stackoverflow.com/questions/21089959/detecting-collision-of-rectangle-with-circle-in-html5-canvas
+// check if bug's head is touching food
 function checkCollision(bug,food)
 {	
-	//console.log("derp"+food);
+	/*/console.log("derp"+food);
 	var deltaX = Math.abs((foods[food].x + 25) - (bugs[bug].x - 5));
 	var deltaY = Math.abs((foods[food].y + 25) - (bugs[bug].y - 20));
 
@@ -168,7 +164,21 @@ function checkCollision(bug,food)
 	else if ((deltaX - 5)*(deltaX - 5) + (deltaY - 20)*(deltaY - 20) <= (25*25))
 	{
 		eatFood(food);
+	}*/
+
+	// it just occured to me that this can be done much simpler given:
+	// a- bugs are always facing their food
+	// b- bugs are always the same size
+	// c- food is always the same size
+	// also: i think it makes more sense to call collision when 
+	// the bug's head touches the food, not its antennae
+
+	if (food[0] < 35)
+	{
+		eatFood(food[1]);
 	}
+
+
 }
 
 function eatFood(food)
