@@ -1,6 +1,6 @@
 // JavaScript source code
 
-var timer = 0;
+var timer = -1;
 var score = 0;
 var isPaused = false;
 
