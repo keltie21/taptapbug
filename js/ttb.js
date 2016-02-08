@@ -39,6 +39,9 @@ function drawStartCanvas()
 }
 
 function getPosition(event) {
+    if (isPaused)
+        return;
+
     drawFrame();
 
     var x = event.offsetX;

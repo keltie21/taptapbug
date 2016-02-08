@@ -3,6 +3,7 @@ var Food = function (x,y)
 {
 	this.x = x;
 	this.y = y;
+	this.active = false;
 
     //http://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas
 	this.img = new Image();
@@ -25,5 +26,11 @@ var Food = function (x,y)
     		console.log(this.x);
         	//context.drawImage(this.img, this.x, this.y);
     	}*/
-    }
+
+        this.active = true;
+	}
+
+	this.removeFood = function () {
+	    this.active = false;
+	}
 }
