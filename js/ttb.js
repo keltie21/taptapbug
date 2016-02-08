@@ -43,11 +43,14 @@ function checkDirections()
 			if (!j)
 			{
 				min[i] = [c, j];
+				//checkCollision(i, min[i][1]); // its more efficient to call this twice (gets called less overall)
 			}
 			if(c < min[i][0])
 			{
 				min[i] = [c, j];
-			}			
+				//checkCollision(i, min[i][1]); // its more efficient to call this here/////
+			}
+			 	
 		}
 
 		// now get the slope y = mx +b
@@ -82,9 +85,10 @@ function spawnFood() {
 // this function will redraw the screen
 function drawFrame(timestamp)
 {
-	context.clearRect(0,0,400,600);
-    checkDirections();
-    moveBugs();
+	context.clearRect(0,0,400,600); //wipe screen
+    checkDirections(); //adjust direction to nearest food
+    moveBugs();  //move the bugs
+    checkCollision(); //see if bug has food
 
 	for (i = 0; i < foods.length; i++)
     {
@@ -92,23 +96,33 @@ function drawFrame(timestamp)
     }
     for (i = 0; i < bugs.length; i++)
     {
-    	console.log(bugs[i].y);
     	bugs[i].makeBug();
     }
+
     window.requestAnimationFrame(drawFrame);
 	
 }
 
-function getPosition() {
+// check for collision between bug (rectancle) and food (circle)
+// adapted from ideas on http://stackoverflow.com/questions/21089959/detecting-collision-of-rectangle-with-circle-in-html5-canvas
+function checkCollision(bug,food)
+{	
+	console.log("herp "+food);
+	//var deltaX = Math.abs((foods[food].x + 25) - (bugs[bug].x - 5));
+	//var deltaY = Math.abs((foods[food].y + 25) - (bugs[bug].y - 20));
 
-	//console.log("ding " + bugs);
+}
+function getPosition() {
 
     var x = event.offsetX;
     var y = event.offsetY;
 
+    // this is not where this goes.
+    // only here now for debug
     drawFrame();
-
 }
+
+
 
 //overlays a grid on the screen, for debug purposes
 function _grid()
