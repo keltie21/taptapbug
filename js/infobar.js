@@ -1,5 +1,9 @@
 // JavaScript source code
+
+var timer = 0;
+var score = 0;
+
 function setInfo(context) {
-    var timer = 60;
-    var score = 0;
+    timer = 60;
+    score = 0;
 }

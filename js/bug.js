@@ -114,6 +114,6 @@ var Bug = function (x, y, colour, direction)
         var dx = x - this.x;
         var dy = y - this.y;
         if (dx * dx + dy * dy <= r * r)
-            makeBug(context, x, y, "green", 0);
+            console.log("Click");
     }
 }

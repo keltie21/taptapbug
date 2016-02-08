@@ -1,23 +1,30 @@
 //var a = makeBug(context, 150, 50, "orange", 300);
+var canvas;
+var bugs = new Array();
+var foods = new Array();
+//var context = canvas.getContext('2d');
+
+//canvas.addEventListener("mousedown", getPosition, false);
 
 function drawStartCanvas()
 {
-	var canvas = document.getElementById('game-screen');
-	var context = canvas.getContext('2d');
+	canvas = document.getElementById('game-screen');
+	context = canvas.getContext('2d');
 
 	canvas.addEventListener("mousedown", getPosition, false);
-	var bugs = new Array();
-	var foods = new Array();
+	//bugs = new Array();
+	//foods = new Array();
 	//spawnFood(canvas, context, fruits);
 	setInfo();
 	//_grid(context);
     //window.requestAnimationFrame(drawFrame);
     //spawnFood(canvas, context);
     //main();
-    var bug1 = new Bug (50, 50, "green", 45);
+    /*var bug1 = new Bug (50, 50, "green", 45);
     var bugs = [bug1];
-    bugs.push(new Bug (100, 100, "orange", 22));
+    bugs.push(new Bug (100, 100, "orange", 22));*/
     
+	bugs = spawnBug(canvas);
     foods = spawnFood(canvas);
     console.log(foods[1]);
 
@@ -34,7 +41,25 @@ function drawStartCanvas()
     {
     	bugs[i].makeBug(context);
     }
+
 }
+
+function getPosition(event) {
+    var x = event.offsetX;
+    var y = event.offsetY;
+    //test = new Bug(x, y, "green", 0);
+    //test.makeBug(context);
+    console.log(bugs.length);
+    for (i = 0; i < bugs.length; i++) {
+        bugs[i].checkPosition(x, y, 30);
+    }
+}
+
+/*canvas.onmousedown = function () {
+    var x = event.offsetX;
+    var y = event.offsetY;
+    makeBug(context, x, y, "green", 0);
+}*/
 
 // check what direction the bugs are supposed to be heading, and redirect them as needed
 function checkDirections(bugs, foods)
@@ -77,6 +102,13 @@ function checkDirections(bugs, foods)
 	}
 }
 
+function spawnBug(canvas) {
+    var bugs = [];
+    bugs.push(new Bug (50, 50, "green", 45));
+    bugs.push(new Bug(100, 100, "orange", 22));
+    return bugs;
+}
+
 function spawnFood(canvas) {
 	var foods = [];
     for (i = 0; i < 5; i++) {
@@ -105,12 +137,7 @@ function moveBugs( bug, context, animationStartTime)
 	//for
 }
 
-function getPosition(event) {
-    var x = event.offsetX;
-    var y = event.offsetY;
-    makeBug(context, x, y, "green", 0);
-    //a.checkPosition(x, y, 30);
-}
+
 
 //overlays a grid on the screen, for debug purposes
 function _grid(context)
