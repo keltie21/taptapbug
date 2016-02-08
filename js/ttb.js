@@ -4,28 +4,27 @@ function drawStartCanvas()
 {
 	var canvas = document.getElementById('game-screen');
 	var context = canvas.getContext('2d');
+	bugs = new Array();
+	foods = new Array();
 
-	canvas.addEventListener("mousedown", getPosition, false);
-	var bugs = new Array();
-	var foods = new Array();
+	canvas.addEventListener("mousedown", function(){getPosition(context, bugs, foods )}, false);
 	//spawnFood(canvas, context, fruits);
 	setInfo();
 	//_grid(context);
     //window.requestAnimationFrame(drawFrame);
     //spawnFood(canvas, context);
     //main();
-    var bug1 = new Bug (50, 50, "green", 45);
-    var bugs = [bug1];
+    bugs.push(new Bug (50, 50, "green", 45));
     bugs.push(new Bug (100, 100, "orange", 22));
     
     foods = spawnFood(canvas);
-    console.log(foods[1]);
+    //console.log(foods[1]);
 
-    console.log("Bug 1: "+bugs[0].direction);
-    console.log("Bug 2: "+bugs[1].direction);
-    checkDirections(bugs, foods);
-    console.log("Bug 1: "+bugs[0].direction);
-    console.log("Bug 2: "+bugs[1].direction);
+    //console.log("Bug 1: "+bugs[0].direction);
+    //console.log("Bug 2: "+bugs[1].direction);
+    checkDirections();
+    //console.log("Bug 1: "+bugs[0].direction);
+    // console.log("Bug 2: "+bugs[1].direction);
     for (i = 0; i < foods.length; i++)
     {
     	foods[i].addFood(context);
@@ -37,7 +36,7 @@ function drawStartCanvas()
 }
 
 // check what direction the bugs are supposed to be heading, and redirect them as needed
-function checkDirections(bugs, foods)
+function checkDirections()
 {
 	var a,b,c; // a^2 + b^2 = c^2 ... pythagoras yo
 	var dX, dY; // deltaX and deltaY for slope calculation
@@ -90,7 +89,16 @@ function spawnFood(canvas) {
 // this function will redraw the screen
 function drawFrame(timestamp)
 {
+	context.clearRect(0,0,400,600);
 	moveBugs();
+	for (i = 0; i < foods.length; i++)
+    {
+    	foods[i].addFood(context);
+    }
+    for (i = 0; i < bugs.length; i++)
+    {
+    	bugs[i].makeBug(context);
+    }
 
 	//makeBug(context, 150, 50, "orange", 300);
     //makeBug(context, 50, (timestamp / 5 ), "black", 0);
@@ -100,16 +108,23 @@ function drawFrame(timestamp)
 	
 }
 
-function moveBugs( bug, context, animationStartTime)
-{
-	//for
-}
+function getPosition(context, bugs, foods) {
 
-function getPosition(event) {
+	//console.log("ding " + bugs);
+
     var x = event.offsetX;
     var y = event.offsetY;
-    makeBug(context, x, y, "green", 0);
-    //a.checkPosition(x, y, 30);
+    context.clearRect(0,0,400,600);
+
+	for (i = 0; i < foods.length; i++)
+    {
+    	foods[i].addFood(context);
+    }
+    for (i = 0; i < bugs.length; i++)
+    {
+    	console.log(bugs[i].y);
+    	bugs[i].makeBug(context);
+    }
 }
 
 //overlays a grid on the screen, for debug purposes
