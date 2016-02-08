@@ -5,39 +5,43 @@ var Bug = function (x, y, colour, direction)
     this.y = y;
     this.colour = colour;
     this.direction = direction
+    // speed is based on colour
+    switch(colour)
+    {
+        case "orange":
+            this.speed = 1;    //60 fps / 60 fs
+            break;
+        case "red":
+            this.speed = 1.25; //75 fps / 60 fs
+            break;
+        case "black":
+            this.speed = 2.5;  //150fps / 60 fs
+            break;
+    }
 
-    // Painting one bug with x, y being left top corner
-    this.makeBug = function ( context ){
-    
-        console.log("inbug: " + this.direction);
+    // Painting one bug
+    this.makeBug = function (){
         alpha = "1.0"; 
         context.globalAlpha = alpha;
     
-        //global(ish), pulled from bug drawing sequence
+        //pulled from bug drawing sequence
         bugWidth = 10;
         bugHeight = 40;
 
         // angle the bug (facing proper direction)
-        //radians = (direction * Math.PI) / 180;
-    
         radians = this.direction - Math.PI/2;
+
         // save context pre-rotate
         context.save();
     
         // center on bug's center point (so rotate is clean)
-        context.translate( x + (bugWidth/2), y +(bugHeight/2)); 
-        
-        //console.log(context);
+        context.translate( this.x + (bugWidth/2), this.y +(bugHeight/2)); 
 
         // rotate context
         context.rotate(radians); 
 
         // move context back to top left to draw the bug
         context.translate( bugWidth / -2, bugHeight /-2);
-        
-        //rectangle helpful for positioning
-        //context.fillStyle="blue";
-        //context.fillRect(0,0,10,40);
 
         /*-- Whiskers, legs and arms--*/
         context.beginPath();
@@ -54,7 +58,7 @@ var Bug = function (x, y, colour, direction)
         context.lineTo(0, 40);
         context.lineWidth = 2;
         context.strokeStyle = colour;
-        context.stroke(); //na
+        context.stroke(); 
 
         /*-- Triangles on the tips --*/
         context.moveTo(0,0);
@@ -103,6 +107,7 @@ var Bug = function (x, y, colour, direction)
         context.fillStyle = "white";
         context.fill();
         context.beginPath();
+        context.strokeStyle = "white";
         context.arc(5, 15, 2.5, 0, Math.PI, false);
         context.stroke();
     

@@ -1,4 +1,3 @@
-//var a = makeBug(context, 150, 50, "orange", 300);
 var canvas;
 var bugs = new Array();
 var foods = new Array();
@@ -6,40 +5,34 @@ var foods = new Array();
 
 //canvas.addEventListener("mousedown", getPosition, false);
 
+
 function drawStartCanvas()
 {
 	canvas = document.getElementById('game-screen');
 	context = canvas.getContext('2d');
+	bugs = new Array();
+	foods = new Array();
 
-	canvas.addEventListener("mousedown", getPosition, false);
-	//bugs = new Array();
-	//foods = new Array();
-	//spawnFood(canvas, context, fruits);
+	canvas.addEventListener("mousedown", function(){getPosition(bugs, foods )}, false);
 	setInfo();
-	//_grid(context);
-    //window.requestAnimationFrame(drawFrame);
-    //spawnFood(canvas, context);
-    //main();
-    /*var bug1 = new Bug (50, 50, "green", 45);
-    var bugs = [bug1];
-    bugs.push(new Bug (100, 100, "orange", 22));*/
-    
-	bugs = spawnBug(canvas);
-    foods = spawnFood(canvas);
-    console.log(foods[1]);
 
-    console.log("Bug 1: "+bugs[0].direction);
-    console.log("Bug 2: "+bugs[1].direction);
-    checkDirections(bugs, foods);
-    console.log("Bug 1: "+bugs[0].direction);
-    console.log("Bug 2: "+bugs[1].direction);
+    bugs.push(new Bug (50, 50, "red", 45));
+    bugs.push(new Bug (300, 300, "orange", 22));
+    bugs.push(new Bug (150, 450, "black", 44));
+    
+
+    foods = spawnFood();
+
+    checkDirections();
+
+
     for (i = 0; i < foods.length; i++)
     {
-    	foods[i].addFood(context);
+    	foods[i].addFood();
     }
     for (i = 0; i < bugs.length; i++)
     {
-    	bugs[i].makeBug(context);
+    	bugs[i].makeBug();
     }
 
 }
@@ -62,7 +55,7 @@ function getPosition(event) {
 }*/
 
 // check what direction the bugs are supposed to be heading, and redirect them as needed
-function checkDirections(bugs, foods)
+function checkDirections()
 {
 	var a,b,c; // a^2 + b^2 = c^2 ... pythagoras yo
 	var dX, dY; // deltaX and deltaY for slope calculation
@@ -77,27 +70,22 @@ function checkDirections(bugs, foods)
 			if (!j)
 			{
 				min[i] = [c, j];
+				//checkCollision(i, min[i][1]); // its more efficient to call this twice (gets called less overall)
 			}
 			if(c < min[i][0])
 			{
 				min[i] = [c, j];
-			}			
+				//checkCollision(i, min[i][1]); // its more efficient to call this here/////
+			}
+			 	
 		}
 
 		// now get the slope y = mx +b
 		dY = (bugs[i].y + 20) - (foods[min[i][1]].y + 25);  // these offsets should probably
 		dX = (bugs[i].x + 5) - (foods[min[i][1]].x + 25);	// be variables...
 
-		/*debug stuff here... can be removed later
-		context.beginPath();
-        context.moveTo(bugs[i].x + 5, bugs[i].y + 20);
-        context.lineTo(foods[min[i][1]].x + 25, foods[min[i][1]].y + 25);
-        
-        context.lineWidth = 2;
-        context.strokeStyle = "black";
-        context.stroke(); //na
-		*/
-		bugs[i].direction = Math.atan2(dY, dX ); //angle the bug
+		// angle the bug
+		bugs[i].direction = Math.atan2(dY, dX); 
 
 	}
 }
@@ -109,7 +97,16 @@ function spawnBug(canvas) {
     return bugs;
 }
 
-function spawnFood(canvas) {
+function moveBugs()
+{
+	//SOH CAH TOA FTW
+	for(i = 0; i < bugs.length; i++)
+	{
+		bugs[i].x -= Math.cos(bugs[i].direction) * bugs[i].speed;
+		bugs[i].y -= Math.sin(bugs[i].direction) * bugs[i].speed;
+	}
+}
+function spawnFood() {
 	var foods = [];
     for (i = 0; i < 5; i++) {
         var x = Math.floor(Math.random() * (canvas.width - 100) + 50);
@@ -122,25 +119,47 @@ function spawnFood(canvas) {
 // this function will redraw the screen
 function drawFrame(timestamp)
 {
-	moveBugs();
+	context.clearRect(0,0,400,600); //wipe screen
+    checkDirections(); //adjust direction to nearest food
+    moveBugs();  //move the bugs
+    checkCollision(); //see if bug has food
 
-	//makeBug(context, 150, 50, "orange", 300);
-    //makeBug(context, 50, (timestamp / 5 ), "black", 0);
-    //makeBug(context, 250, 50, "green", 45);
-    window.requestAnimationFrame(drawFrame)
+	for (i = 0; i < foods.length; i++)
+    {
+    	foods[i].addFood();
+    }
+    for (i = 0; i < bugs.length; i++)
+    {
+    	bugs[i].makeBug();
+    }
 
+    window.requestAnimationFrame(drawFrame);
 	
 }
 
-function moveBugs( bug, context, animationStartTime)
-{
-	//for
+// check for collision between bug (rectancle) and food (circle)
+// adapted from ideas on http://stackoverflow.com/questions/21089959/detecting-collision-of-rectangle-with-circle-in-html5-canvas
+function checkCollision(bug,food)
+{	
+	console.log("derp"+food);
+	//var deltaX = Math.abs((foods[food].x + 25) - (bugs[bug].x - 5));
+	//var deltaY = Math.abs((foods[food].y + 25) - (bugs[bug].y - 20));
+
+}
+function getPosition() {
+
+    var x = event.offsetX;
+    var y = event.offsetY;
+
+    // this is not where this goes.
+    // only here now for debug
+    drawFrame();
 }
 
 
 
 //overlays a grid on the screen, for debug purposes
-function _grid(context)
+function _grid()
 {
 	for (i = 0; i < 600; i = i + 10)
 	{
