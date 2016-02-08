@@ -36,13 +36,15 @@ function drawStartCanvas()
     	bugs[i].makeBug();
     }
 
+    drawFrame();
+
 }
 
 function getPosition(event) {
     if (isPaused)
         return;
 
-    drawFrame();
+    
 
     var x = event.offsetX;
     var y = event.offsetY;
@@ -190,17 +192,6 @@ function eatFood(food)
 	foods.splice(food, 1);
 	console.log("after " + foods.length);
 }
-function getPosition(event) {
-
-    var x = event.offsetX;
-    var y = event.offsetY;
-
-    // this is not where this goes.
-    // only here now for debug
-    drawFrame();
-}
-
-
 
 //overlays a grid on the screen, for debug purposes
 function _grid()
