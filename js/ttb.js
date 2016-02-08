@@ -122,7 +122,14 @@ function drawFrame(timestamp)
 	context.clearRect(0,0,400,600); //wipe screen
     checkDirections(); //adjust direction to nearest food
     moveBugs();  //move the bugs
-    checkCollision(); //see if bug has food
+    for (i = 0; i < foods.length; i++)
+    {
+    	for (j = 0; j< bugs.length; j++)
+    	{
+    		checkCollision(j,i)
+    	}
+    }
+    //checkCollision(); //see if bug has food
 
 	for (i = 0; i < foods.length; i++)
     {
@@ -141,12 +148,37 @@ function drawFrame(timestamp)
 // adapted from ideas on http://stackoverflow.com/questions/21089959/detecting-collision-of-rectangle-with-circle-in-html5-canvas
 function checkCollision(bug,food)
 {	
-	console.log("derp"+food);
-	//var deltaX = Math.abs((foods[food].x + 25) - (bugs[bug].x - 5));
-	//var deltaY = Math.abs((foods[food].y + 25) - (bugs[bug].y - 20));
+	//console.log("derp"+food);
+	var deltaX = Math.abs((foods[food].x + 25) - (bugs[bug].x - 5));
+	var deltaY = Math.abs((foods[food].y + 25) - (bugs[bug].y - 20));
 
+	//difference greater than half-width plus radius or half-height + radius
+	if ( deltaX > (5 + 25) || deltaY > (20 + 25))
+	{
+		return false; //can short circuit this function
+	}
+
+	//differnce less than half of bug -> def colliding
+	if (deltaX <= 5 || deltaY <= 20)
+	{
+		eatFood(food);
+	}
+
+	//pythagoras again (between bug middle and food middle)
+	else if ((deltaX - 5)*(deltaX - 5) + (deltaY - 20)*(deltaY - 20) <= (25*25))
+	{
+		eatFood(food);
+	}
 }
-function getPosition() {
+
+function eatFood(food)
+{
+	console.log("Ate " + food);
+	console.log("foods " + foods.length);
+	foods.splice(food, 1);
+	console.log("after " + foods.length);
+}
+function getPosition(event) {
 
     var x = event.offsetX;
     var y = event.offsetY;
