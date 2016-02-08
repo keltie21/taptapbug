@@ -43,8 +43,6 @@ function getPosition(event) {
 
     var x = event.offsetX;
     var y = event.offsetY;
-    //test = new Bug(x, y, "green", 0);
-    //test.makeBug(context);
     console.log(bugs.length);
     for (i = 0; i < bugs.length; i++) {
         var hit = bugs[i].checkPosition(x, y, 30);
@@ -53,17 +51,6 @@ function getPosition(event) {
             bugs.splice(i, 1);
     }
 }
-
-/*canvas.onmousedown = function (event) {
-   var x = event.offsetX;
-    var y = event.offsetY;
-    //test = new Bug(x, y, "green", 0);
-    //test.makeBug(context);
-    console.log(bugs.length);
-    for (i = 0; i < bugs.length; i++) {
-        bugs[i].checkPosition(x, y, 30);
-    }
-}*/
 
 // check what direction the bugs are supposed to be heading, and redirect them as needed
 function checkDirections()
