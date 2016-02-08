@@ -37,9 +37,10 @@ var Bug = function (x, y, colour, direction)
         context.rotate(radians); 
 
         // step the bug forward
-        context.translate(0,this.speed*this.steps*-1);
-        this.steps++;
 
+        //context.translate(0,this.speed*this.steps*-1);
+        //this.steps++;
+        //console.log (context.x);
         // move context back to top left to draw the bug
         context.translate( bugWidth / -2, bugHeight /-2);
         

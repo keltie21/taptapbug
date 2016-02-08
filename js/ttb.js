@@ -2,8 +2,8 @@
 
 function drawStartCanvas()
 {
-	var canvas = document.getElementById('game-screen');
-	var context = canvas.getContext('2d');
+	canvas = document.getElementById('game-screen');
+	context = canvas.getContext('2d');
 	bugs = new Array();
 	foods = new Array();
 
@@ -15,7 +15,7 @@ function drawStartCanvas()
     //spawnFood(canvas, context);
     //main();
     bugs.push(new Bug (50, 50, "green", 45));
-    bugs.push(new Bug (100, 100, "orange", 22));
+    bugs.push(new Bug (300, 300, "orange", 22));
     
     foods = spawnFood(canvas);
     //console.log(foods[1]);
@@ -76,6 +76,15 @@ function checkDirections()
 	}
 }
 
+function moveBugs()
+{
+	//SOH CAH TOA FTW
+	for(i = 0; i < bugs.length; i++)
+	{
+		bugs[i].x -= Math.cos(bugs[i].direction) * bugs[i].speed;
+		bugs[i].y -= Math.sin(bugs[i].direction) * bugs[i].speed;
+	}
+}
 function spawnFood(canvas) {
 	var foods = [];
     for (i = 0; i < 5; i++) {
@@ -114,7 +123,11 @@ function getPosition(context, bugs, foods) {
 
     var x = event.offsetX;
     var y = event.offsetY;
+
+    
     context.clearRect(0,0,400,600);
+    checkDirections();
+    moveBugs();
 
 	for (i = 0; i < foods.length; i++)
     {
