@@ -129,21 +129,40 @@ function drawFrame(timestamp)
 	context.clearRect(0,0,400,600); //wipe screen
     checkDirections(); //adjust direction to nearest food
     moveBugs();  //move the bugs
-    
 
+    // paint all the food to the screen
 	for (i = 0; i < foods.length; i++)
     {
     	foods[i].addFood();
     }
+    // paint all the bugs to the screen
     for (i = 0; i < bugs.length; i++)
     {
     	bugs[i].makeBug();
     }
-
-    window.requestAnimationFrame(drawFrame);
+    if(foods.length == 0)
+    {
+    	isPaused = true;
+    	died = true;
+    }
+    else
+    {
+    	if (!isPaused)
+    	{
+    		window.requestAnimationFrame(drawFrame);
+    	}
+    	else
+    	{
+    		pauseGame();
+    	}
+    }
 	
 }
 
+function pauseGame()
+{
+	
+}
 // check if bug's head is touching food
 function checkCollision(bug,food)
 {	
