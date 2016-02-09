@@ -58,6 +58,9 @@ function getPosition(event) {
 // check what direction the bugs are supposed to be heading, and redirect them as needed
 function checkDirections()
 {
+    if (isPaused)
+        return;
+
 	var a,b,c; // a^2 + b^2 = c^2 ... pythagoras yo
 	var dX, dY; // deltaX and deltaY for slope calculation
 	var min = []; // array of (minValue, foodIndex) tuples
@@ -98,7 +101,7 @@ function checkDirections()
 //generate a bug, and determine how long until next bug
 function spawnBug() 
 {
-    if (timer == 0)
+    if (isPaused)
         return;
 	whichBug = [1,1,1,1,2,2,2,3,3,3]; //0.4 prob type 1 (orange); 0.3 type 2 (red); 0.3 prob type 3 (black);
 	i = Math.floor(Math.random() * 10) // pick an index
@@ -122,6 +125,8 @@ function spawnBug()
 
 function moveBugs()
 {
+    if (isPaused)
+        return;
 	//SOH CAH TOA FTW
 	for(i = 0; i < bugs.length; i++)
 	{
@@ -142,6 +147,8 @@ function spawnFood() {
 // this function will redraw the screen
 function drawFrame(timestamp)
 {
+    //if (isPaused)
+    //    return;
 	context.clearRect(0,0,400,600); //wipe screen
     checkDirections(); //adjust direction to nearest food
     moveBugs();  //move the bugs
@@ -162,6 +169,8 @@ function drawFrame(timestamp)
     	died = true;
     }
     else
+        window.requestAnimationFrame(drawFrame);
+    /*else
     {
     	if (!isPaused)
     	{
@@ -171,7 +180,7 @@ function drawFrame(timestamp)
     	{
     		pauseGame();
     	}
-    }
+    }*/
 	
 }
 
