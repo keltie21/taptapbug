@@ -1,6 +1,7 @@
 var canvas = new Object();
 var bugs = new Array();
 var foods = new Array();
+gameover = false;
 //var context = canvas.getContext('2d');
 
 //canvas.addEventListener("mousedown", getPosition, false);
@@ -17,14 +18,13 @@ function drawStartCanvas()
 	//canvas.addEventListener("mousedown", function(){getPosition(bugs, foods )}, false);
 	setInfo();
 
-    bugs.push(new Bug (50, 50, "red", 45));
-    bugs.push(new Bug (300, 300, "orange", 22));
-    bugs.push(new Bug (150, 450, "black", 44));
+	drawBar();
+        
+	spawnBug();
+    foods = spawnFood();
     
 
-    foods = spawnFood();
-
-    checkDirections();
+    //checkDirections();
 
 
     for (i = 0; i < foods.length; i++)
@@ -36,13 +36,13 @@ function drawStartCanvas()
     	bugs[i].makeBug();
     }
 
+    drawFrame();
+
 }
 
 function getPosition(event) {
     if (isPaused)
         return;
-
-    drawFrame();
 
     var x = event.offsetX;
     var y = event.offsetY;
@@ -95,11 +95,27 @@ function checkDirections()
 	}
 }
 
-function spawnBug(canvas) {
-    var bugs = [];
-    bugs.push(new Bug (50, 50, "green", 45));
-    bugs.push(new Bug(100, 100, "orange", 22));
-    return bugs;
+//generate a bug, and determine how long until next bug
+function spawnBug() 
+{
+	whichBug = [1,1,1,1,2,2,2,3,3,3]; //0.4 prob type 1 (orange); 0.3 type 2 (red); 0.3 prob type 3 (black);
+	i = Math.floor(Math.random() * 10) // pick an index
+	x = Math.floor(Math.random() * 380) + 10; // x coordinate between 10 and 390
+	console.log(i);
+	switch (whichBug[i])
+	{
+		case 1:
+			bugs.push(new Bug(x, 0, "orange", 0));
+			break;
+		case 2:
+			bugs.push(new Bug(x, 0, "red", 0));
+			break;
+		case 3:
+			bugs.push(new Bug(x, 0, "black", 0));
+			break;
+	}
+	nextBugTime = Math.floor(Math.random() * 2000) + 1000; // milliseconds between 1s and 2s
+	setTimeout(spawnBug, nextBugTime);
 }
 
 function moveBugs()
@@ -127,21 +143,40 @@ function drawFrame(timestamp)
 	context.clearRect(0,0,400,600); //wipe screen
     checkDirections(); //adjust direction to nearest food
     moveBugs();  //move the bugs
-    
 
+    // paint all the food to the screen
 	for (i = 0; i < foods.length; i++)
     {
     	foods[i].addFood();
     }
+    // paint all the bugs to the screen
     for (i = 0; i < bugs.length; i++)
     {
     	bugs[i].makeBug();
     }
-
-    window.requestAnimationFrame(drawFrame);
+    if(foods.length == 0)
+    {
+    	isPaused = true;
+    	died = true;
+    }
+    else
+    {
+    	if (!isPaused)
+    	{
+    		window.requestAnimationFrame(drawFrame);
+    	}
+    	else
+    	{
+    		pauseGame();
+    	}
+    }
 	
 }
 
+function pauseGame()
+{
+
+}
 // check if bug's head is touching food
 function checkCollision(bug,food)
 {	
@@ -186,21 +221,9 @@ function checkCollision(bug,food)
 function eatFood(food)
 {
 	console.log("Ate " + food);
-	console.log("foods " + foods.length);
 	foods.splice(food, 1);
-	console.log("after " + foods.length);
+	
 }
-function getPosition(event) {
-
-    var x = event.offsetX;
-    var y = event.offsetY;
-
-    // this is not where this goes.
-    // only here now for debug
-    drawFrame();
-}
-
-
 
 //overlays a grid on the screen, for debug purposes
 function _grid()
