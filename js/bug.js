@@ -117,15 +117,20 @@ var Bug = function (x, y, colour, direction)
 
         this.active = true;
     }
+
     //http://stackoverflow.com/questions/20814883/add-an-event-listener-to-a-drawn-object-on-html5-canvas
     this.checkPosition = function (x, y, r){
         var dx = x - this.x;
         var dy = y - this.y;
+        // If an active bug is within the 30px radius of the click, it will be deactivated
+        // to avoid clicking the same bug multiple times.
         if (dx * dx + dy * dy <= r * r && this.active) {
             addScore(this.colour);
             console.log("Click: " + score);
             this.active = false;
         }
+        // Return whether or not the bug is active so that we know to remove it from the list
+        // of bugs in the latter case.
         return this.active;
     }
 }
