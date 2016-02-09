@@ -114,6 +114,8 @@ function spawnBug()
 			bugs.push(new Bug(x, 0, "black", 0));
 			break;
 	}
+	nextBugTime = Math.floor(Math.random() * 2000) + 1000; // milliseconds between 1s and 2s
+	setTimeout(spawnBug, nextBugTime);
 }
 
 function moveBugs()
@@ -219,9 +221,8 @@ function checkCollision(bug,food)
 function eatFood(food)
 {
 	console.log("Ate " + food);
-	console.log("foods " + foods.length);
 	foods.splice(food, 1);
-	console.log("after " + foods.length);
+	
 }
 
 //overlays a grid on the screen, for debug purposes
