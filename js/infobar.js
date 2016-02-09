@@ -89,12 +89,14 @@ function addScore(colour) {
             score += 5;  //150fps / 60 fs
             break;
     }
+    drawScore();
 }
 
 function countdown() {
     if (!isPaused)
         timer--;
     console.log("Time: " + timer);
+    drawTime();
     if (timer == 0)
         clearInterval(myTimer);
 }
