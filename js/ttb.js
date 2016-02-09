@@ -42,15 +42,13 @@ function getPosition(event) {
     if (isPaused)
         return;
 
-    //drawFrame();
+    drawFrame();
 
     var x = event.offsetX;
     var y = event.offsetY;
     console.log(bugs.length);
     for (i = 0; i < bugs.length; i++) {
-        // Check each bug to see if it was 'clicked' on.
-        // If so, remove it from the list of bugs
-        var hit = bugs[i].checkPosition(x, y, 30); 
+        var hit = bugs[i].checkPosition(x, y, 30);
         if (!hit)
             // http://www.w3schools.com/jsref/jsref_splice.asp
             bugs.splice(i, 1);

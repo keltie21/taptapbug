@@ -14,10 +14,6 @@ function setInfo(context) {
     myTimer = setInterval(countdown, 1000);
 }
 
-function takeDownInfo(context){
-    clearInterval(myTimer);
-}
-
 function addScore(colour) {
     switch (colour) {
         case "orange":
