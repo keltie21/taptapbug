@@ -4,6 +4,7 @@ var timer = -1;
 var score = 0;
 var isPaused = false;
 
+// bar init function
 function drawBar()
 {
 	barCanvas = document.getElementById("controls");
@@ -42,7 +43,7 @@ function drawPause()
 	{
 		barContext.fillStyle = "white";
 	}
-	//draw pause button
+	
 	barContext.strokeStyle = "black";
 	barContext.lineWidth = 3;
 	

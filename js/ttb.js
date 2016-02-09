@@ -1,6 +1,7 @@
 var canvas = new Object();
 var bugs = new Array();
 var foods = new Array();
+gameover = false;
 //var context = canvas.getContext('2d');
 
 //canvas.addEventListener("mousedown", getPosition, false);
@@ -18,14 +19,12 @@ function drawStartCanvas()
 	setInfo();
 
 	drawBar();
-    bugs.push(new Bug (50, 50, "red", 45));
-    bugs.push(new Bug (300, 300, "orange", 22));
-    bugs.push(new Bug (150, 450, "black", 44));
+        
+	spawnBug();
+    foods = spawnFood();
     
 
-    foods = spawnFood();
-
-    checkDirections();
+    //checkDirections();
 
 
     for (i = 0; i < foods.length; i++)
@@ -44,8 +43,6 @@ function drawStartCanvas()
 function getPosition(event) {
     if (isPaused)
         return;
-
-    
 
     var x = event.offsetX;
     var y = event.offsetY;
@@ -98,11 +95,25 @@ function checkDirections()
 	}
 }
 
-function spawnBug(canvas) {
-    var bugs = [];
-    bugs.push(new Bug (50, 50, "green", 45));
-    bugs.push(new Bug(100, 100, "orange", 22));
-    return bugs;
+//generate a bug, and determine how long until next bug
+function spawnBug() 
+{
+	whichBug = [1,1,1,1,2,2,2,3,3,3]; //0.4 prob type 1 (orange); 0.3 type 2 (red); 0.3 prob type 3 (black);
+	i = Math.floor(Math.random() * 10) // pick an index
+	x = Math.floor(Math.random() * 380) + 10; // x coordinate between 10 and 390
+	console.log(i);
+	switch (whichBug[i])
+	{
+		case 1:
+			bugs.push(new Bug(x, 0, "orange", 0));
+			break;
+		case 2:
+			bugs.push(new Bug(x, 0, "red", 0));
+			break;
+		case 3:
+			bugs.push(new Bug(x, 0, "black", 0));
+			break;
+	}
 }
 
 function moveBugs()
