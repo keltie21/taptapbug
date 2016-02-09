@@ -17,6 +17,7 @@ function drawStartCanvas()
 	//canvas.addEventListener("mousedown", function(){getPosition(bugs, foods )}, false);
 	setInfo();
 
+	drawBar();
     bugs.push(new Bug (50, 50, "red", 45));
     bugs.push(new Bug (300, 300, "orange", 22));
     bugs.push(new Bug (150, 450, "black", 44));
@@ -161,7 +162,7 @@ function drawFrame(timestamp)
 
 function pauseGame()
 {
-	
+
 }
 // check if bug's head is touching food
 function checkCollision(bug,food)
