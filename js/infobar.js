@@ -3,6 +3,7 @@
 var timer = -1;
 var score = 0;
 var isPaused = false;
+var pButton = new Object();
 
 // bar init function
 function drawBar()
@@ -10,10 +11,9 @@ function drawBar()
 	barCanvas = document.getElementById("controls");
 	barContext = barCanvas.getContext("2d");
 	barContext.font = "20px Calibri";
-	drawPause();
+	pButton = new PauseButton();
 	drawScore();
 	drawTime();
-
 }
 
 function drawScore()
@@ -32,8 +32,13 @@ function drawTime()
 	barContext.fillText("sec", 40, 30);
 }
 
-function drawPause()
+var PauseButton = function()
 {
+    
+    this.x = 200;
+    this.y = 25;
+    this.r = 20;
+
 	barContext.clearRect(150,0, 100, 50);
 	if(isPaused)
 	{
@@ -48,7 +53,7 @@ function drawPause()
 	barContext.lineWidth = 3;
 	
 	barContext.beginPath();
-	barContext.arc(200, 25, 20, 0, 2 * Math.PI, false);
+	barContext.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false);
 	barContext.stroke();
 	barContext.fill();
 
@@ -67,6 +72,16 @@ function drawPause()
 		barContext.lineTo(205,35);
 	}
 	barContext.stroke();
+
+	this.wasClicked = function (x, y) {
+	    var dx = x - this.x;
+	    var dy = y - this.y;
+	    console.log("time to pause: ", dx, dy);
+	    if (dx * dx + dy * dy <= this.r * this.r) {
+	        pauseGame();
+	    }
+	    console.log(isPaused);
+	}
 
 }
 
@@ -102,6 +117,6 @@ function countdown() {
         clearInterval(myTimer);
 }
 
-function pausing() {
+function pauseGame() {
     isPaused = !isPaused;
 }

@@ -41,11 +41,11 @@ function drawStartCanvas()
 }
 
 function getPosition(event) {
-    if (isPaused)
-        return;
-
     var x = event.offsetX;
     var y = event.offsetY;
+    pButton.wasClicked(x, y);
+    if (isPaused)
+        return;
     console.log(bugs.length);
     for (i = 0; i < bugs.length; i++) {
         var hit = bugs[i].checkPosition(x, y, 30);
@@ -98,6 +98,8 @@ function checkDirections()
 //generate a bug, and determine how long until next bug
 function spawnBug() 
 {
+    if (timer == 0)
+        return;
 	whichBug = [1,1,1,1,2,2,2,3,3,3]; //0.4 prob type 1 (orange); 0.3 type 2 (red); 0.3 prob type 3 (black);
 	i = Math.floor(Math.random() * 10) // pick an index
 	x = Math.floor(Math.random() * 380) + 10; // x coordinate between 10 and 390
@@ -173,10 +175,6 @@ function drawFrame(timestamp)
 	
 }
 
-function pauseGame()
-{
-
-}
 // check if bug's head is touching food
 function checkCollision(bug,food)
 {	
