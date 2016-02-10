@@ -21,7 +21,7 @@ function drawStartCanvas()
 
 	drawBar();
     
-	startScreen();
+	//startScreen();
 
 	spawnBug();
     foods = spawnFood();
@@ -29,7 +29,7 @@ function drawStartCanvas()
     
     
 
-    /*for (i = 0; i < foods.length; i++)
+    for (i = 0; i < foods.length; i++)
     {
     	foods[i].addFood();
     }
@@ -38,7 +38,7 @@ function drawStartCanvas()
     	bugs[i].makeBug();
     }
 
-    //drawFrame(); */
+    drawFrame(); 
 
 }
 function getHighScore()

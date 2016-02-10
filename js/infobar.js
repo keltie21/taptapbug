@@ -2,7 +2,7 @@
 
 var timer = -1;
 var score = 0;
-var isPaused = true;
+var isPaused = false;
 var pButton = new Object();
 var isLevel1 = true;
 var levelSpeed = 0;
@@ -90,7 +90,7 @@ var PauseButton = function()
 function setInfo(context) {
     timer = 60;
     score = 0;
-    isPaused = true;
+    isPaused = false;
     if (isLevel1)
         levelSpeed = 1;
     else
