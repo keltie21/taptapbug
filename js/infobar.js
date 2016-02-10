@@ -4,6 +4,8 @@ var timer = -1;
 var score = 0;
 var isPaused = false;
 var pButton = new Object();
+var isLevel1 = true;
+var levelSpeed = 0;
 
 // bar init function
 function drawBar()
@@ -89,6 +91,10 @@ function setInfo(context) {
     timer = 60;
     score = 0;
     isPaused = false;
+    if (isLevel1)
+        levelSpeed = 1;
+    else
+        levelSpeed = 1 + (1 / 3);
     //http://www.w3schools.com/js/js_timing.asp
     myTimer = setInterval(countdown, 1000);
 }

@@ -10,13 +10,13 @@ var Bug = function (x, y, colour, direction)
     switch(colour)
     {
         case "orange":
-            this.speed = 1;    //60 fps / 60 fs
+            this.speed = 1 * levelSpeed;    //60 fps / 60 fs
             break;
         case "red":
-            this.speed = 1.25; //75 fps / 60 fs
+            this.speed = 1.25 * levelSpeed; //75 fps / 60 fs
             break;
         case "black":
-            this.speed = 2.5;  //150fps / 60 fs
+            this.speed = 2.5 * levelSpeed;  //150fps / 60 fs
             break;
     }
 
