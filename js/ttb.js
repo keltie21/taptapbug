@@ -101,26 +101,25 @@ function checkDirections()
 //generate a bug, and determine how long until next bug
 function spawnBug() 
 {
-    if (isPaused)
-        return;
-	whichBug = [1,1,1,1,2,2,2,3,3,3]; //0.4 prob type 1 (orange); 0.3 type 2 (red); 0.3 prob type 3 (black);
-	i = Math.floor(Math.random() * 10) // pick an index
-	x = Math.floor(Math.random() * 380) + 10; // x coordinate between 10 and 390
-	console.log(i);
-	switch (whichBug[i])
-	{
-		case 1:
-			bugs.push(new Bug(x, 0, "orange", 0));
-			break;
-		case 2:
-			bugs.push(new Bug(x, 0, "red", 0));
-			break;
-		case 3:
-			bugs.push(new Bug(x, 0, "black", 0));
-			break;
-	}
-	nextBugTime = Math.floor(Math.random() * 2000) + 1000; // milliseconds between 1s and 2s
-	setTimeout(spawnBug, nextBugTime);
+    if (!isPaused) {
+        whichBug = [1, 1, 1, 1, 2, 2, 2, 3, 3, 3]; //0.4 prob type 1 (orange); 0.3 type 2 (red); 0.3 prob type 3 (black);
+        i = Math.floor(Math.random() * 10) // pick an index
+        x = Math.floor(Math.random() * 380) + 10; // x coordinate between 10 and 390
+        console.log(i);
+        switch (whichBug[i]) {
+            case 1:
+                bugs.push(new Bug(x, 0, "orange", 0));
+                break;
+            case 2:
+                bugs.push(new Bug(x, 0, "red", 0));
+                break;
+            case 3:
+                bugs.push(new Bug(x, 0, "black", 0));
+                break;
+        }
+    }
+    nextBugTime = Math.floor(Math.random() * 2000) + 1000; // milliseconds between 1s and 2s
+    setTimeout(spawnBug, nextBugTime);
 }
 
 function moveBugs()
