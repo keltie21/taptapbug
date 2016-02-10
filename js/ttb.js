@@ -16,18 +16,20 @@ function drawStartCanvas()
 
 	canvas.addEventListener("mousedown", getPosition, false);
 	//canvas.addEventListener("mousedown", function(){getPosition(bugs, foods )}, false);
+
 	setInfo();
 
 	drawBar();
-        
+    
+	startScreen();
+
 	spawnBug();
     foods = spawnFood();
     
+    
+    
 
-    //checkDirections();
-
-
-    for (i = 0; i < foods.length; i++)
+    /*for (i = 0; i < foods.length; i++)
     {
     	foods[i].addFood();
     }
@@ -36,8 +38,54 @@ function drawStartCanvas()
     	bugs[i].makeBug();
     }
 
-    drawFrame();
+    //drawFrame(); */
 
+}
+function getHighScore()
+{
+	return "1337";
+}
+var LevelButton = function(lvl, x, y)
+{
+	context.fillStyle = "white";
+	context.beginPath();
+	context.arc(x, y, 15, 0, 2 * Math.PI, false);
+	context.stroke();
+	context.fill();
+	context.fillStyle = "black";
+	context.font="20px Calibri";
+
+	context.fillText(lvl,x-5,y+5);
+}
+
+var StartButton = function()
+{
+	context.fillRect(100,350, 200, 100);
+	context.fillStyle="black";
+	context.font="70px Calibri";
+	context.fillText("GO!",145,420);
+}
+function startScreen()
+{
+	context.clearRect(0,0,400,600);
+	context.fillRect(50,50,300,500);
+
+	context.fillStyle = "white";
+	context.font="35px Calibri";
+	context.fillText("High Score:  " + getHighScore(), 65, 150);	
+	
+
+	lvl1 = new LevelButton(1,220, 240);
+	lvl2 = new LevelButton(2,300, 240);
+
+	context.fillStyle = "white";
+	context.font = "35px Calibri";
+	context.fillText("LEVEL:", 65, 250);
+
+	start = new StartButton();
+
+	window.setTimeout(drawFrame, 10000);
+	
 }
 
 function getPosition(event) {
