@@ -91,7 +91,6 @@ function startScreen()
 function getPosition(event) {
     var x = event.offsetX;
     var y = event.offsetY;
-    pButton.wasClicked(x, y);
     if (isPaused)
         return;
     console.log(bugs.length);
@@ -196,7 +195,8 @@ function drawFrame(timestamp)
 {
     //if (isPaused)
     //    return;
-	context.clearRect(0,0,400,600); //wipe screen
+    context.clearRect(0, 0, 400, 600); //wipe screen
+    pButton.redraw();
     checkDirections(); //adjust direction to nearest food
     moveBugs();  //move the bugs
 
