@@ -12,6 +12,7 @@ function drawBar()
 {
 	barCanvas = document.getElementById("controls");
 	barContext = barCanvas.getContext("2d");
+	barCanvas.addEventListener("mousedown", checkPause, false);
 	barContext.font = "20px Calibri";
 	pButton = new PauseButton();
 	drawScore();
@@ -34,6 +35,12 @@ function drawTime()
 	barContext.fillText("sec", 40, 30);
 }
 
+function checkPause(event) {
+    var x = event.offsetX;
+    var y = event.offsetY;
+    pButton.wasClicked(x, y);
+}
+
 var PauseButton = function()
 {
     
@@ -41,39 +48,37 @@ var PauseButton = function()
     this.y = 25;
     this.r = 20;
 
-	barContext.clearRect(150,0, 100, 50);
-	if(isPaused)
-	{
-		barContext.fillStyle = "red";
-	}
-	else
-	{
-		barContext.fillStyle = "white";
-	}
-	
-	barContext.strokeStyle = "black";
-	barContext.lineWidth = 3;
-	
-	barContext.beginPath();
-	barContext.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false);
-	barContext.stroke();
-	barContext.fill();
+    this.redraw = function () {
+        barContext.clearRect(150, 0, 100, 50);
+        if (isPaused) {
+            barContext.fillStyle = "red";
+        }
+        else {
+            barContext.fillStyle = "white";
+        }
 
-	if(isPaused)
-	{
-		barContext.moveTo(195,15);
-		barContext.lineTo(195,35);
-		barContext.lineTo(210,25);
-		barContext.lineTo(195,15);
-	}
-	else
-	{
-		barContext.moveTo(195,15);
-		barContext.lineTo(195,35);
-		barContext.moveTo(205,15);
-		barContext.lineTo(205,35);
-	}
-	barContext.stroke();
+        barContext.strokeStyle = "black";
+        barContext.lineWidth = 3;
+
+        barContext.beginPath();
+        barContext.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false);
+        barContext.stroke();
+        barContext.fill();
+
+        if (isPaused) {
+            barContext.moveTo(195, 15);
+            barContext.lineTo(195, 35);
+            barContext.lineTo(210, 25);
+            barContext.lineTo(195, 15);
+        }
+        else {
+            barContext.moveTo(195, 15);
+            barContext.lineTo(195, 35);
+            barContext.moveTo(205, 15);
+            barContext.lineTo(205, 35);
+        }
+        barContext.stroke();
+    }
 
 	this.wasClicked = function (x, y) {
 	    var dx = x - this.x;
