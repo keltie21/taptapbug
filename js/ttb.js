@@ -180,6 +180,7 @@ function moveBugs()
 		bugs[i].y -= Math.sin(bugs[i].direction) * bugs[i].speed;
 	}
 }
+
 function spawnFood() {
 	var foods = [];
     for (i = 0; i < 5; i++) {
@@ -201,22 +202,23 @@ function drawFrame(timestamp)
     moveBugs();  //move the bugs
 
     // paint all the food to the screen
-	for (i = 0; i < foods.length; i++)
-    {
-    	foods[i].addFood();
-    }
-    // paint all the bugs to the screen
-    for (i = 0; i < bugs.length; i++)
-    {
-    	bugs[i].makeBug();
-    }
     if(foods.length == 0)
     {
-    	isPaused = true;
-    	died = true;
+        gameOver();
     }
-    else
+    else {
+        for (i = 0; i < foods.length; i++)
+        {
+            foods[i].addFood();
+        }
+        // paint all the bugs to the screen
+        for (i = 0; i < bugs.length; i++)
+        {
+            bugs[i].makeBug();
+        }
         window.requestAnimationFrame(drawFrame);
+    }
+        
     /*else
     {
     	if (!isPaused)

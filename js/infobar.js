@@ -93,7 +93,7 @@ var PauseButton = function()
 }
 
 function setInfo(context) {
-    timer = 60;
+    timer = 10;
     score = 0;
     isPaused = false;
     if (isLevel1)
@@ -124,10 +124,28 @@ function countdown() {
         timer--;
     console.log("Time: " + timer);
     drawTime();
-    if (timer == 0)
-        clearInterval(myTimer);
+    if (timer == 0) {
+        gameOver();
+    }
 }
 
 function pauseGame() {
     isPaused = !isPaused;
+}
+
+function newHighScore(score) {
+    var hiscore = 0;
+    var newscore = 0;
+    if (isLevel1)
+        localStorage.level1HiScore = (localStorage.level1HiScore >= score) ? localStorage.level1HiScore : score;
+    else 
+        localStorage.level2HiScore = (localStorage.level2HiScore >= score) ? localStorage.level2HiScore : score;
+    console.log("Hi-score: " + localStorage.level1HiScore);
+}
+
+function gameOver() {
+    isPaused = true;
+    gameover = true;
+    clearInterval(myTimer);
+    newHighScore(score);
 }
