@@ -1,16 +1,8 @@
 #controls
 {
-	position: absolute;
-	left: 50%;
-	margin-left: -200px;
 	border: solid 1px black;
 }
 #game-screen
 {
-	position: absolute;
-	top:50%;
-	left:50%;
-	margin-left: -200px;
-	margin-top: -300px;
 	border: solid 1px black;
 }
