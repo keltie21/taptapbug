@@ -128,4 +128,6 @@ var Bug = function (x, y, colour, direction)
         }
         return this.active;
     }
+
+
 }
