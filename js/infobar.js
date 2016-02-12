@@ -92,7 +92,7 @@ var PauseButton = function()
 
 }
 
-function setInfo(context) {
+function setInfo() {
     timer = 60;
     score = 0;
     isPaused = false;

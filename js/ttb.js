@@ -2,32 +2,25 @@ var canvas = new Object();
 var bugs = new Array();
 var foods = new Array();
 gameover = false;
-//var context = canvas.getContext('2d');
+state = "start"
+var isLevel1 = true;
+var levelSpeed = 0;
 
-//canvas.addEventListener("mousedown", getPosition, false);
-
-
-function drawStartCanvas()
+// catch all for startup items
+function init()
 {
 	canvas = document.getElementById('game-screen');
 	context = canvas.getContext('2d');
-	//bugs = new Array();
-	//foods = new Array();
-
 	canvas.addEventListener("mousedown", getPosition, false);
-	//canvas.addEventListener("mousedown", function(){getPosition(bugs, foods )}, false);
 
 	setInfo();
-
+	startScreen();
+}
+function drawStartCanvas()
+{
 	drawBar();
-    
-	//startScreen();
-
 	spawnBug();
     foods = spawnFood();
-    
-    
-    
 
     for (i = 0; i < foods.length; i++)
     {
@@ -45,17 +38,24 @@ function getHighScore()
 {
 	return "1337";
 }
-var LevelButton = function(lvl, x, y)
+var LevelButton = function(lvl, x, y, selected)
 {
 	context.fillStyle = "white";
 	context.beginPath();
 	context.arc(x, y, 15, 0, 2 * Math.PI, false);
 	context.stroke();
 	context.fill();
+	if (selected)
+	{
+		context.fillStyle= "grey";
+		context.arc(x, y, 15, 0, 2 * Math.Pi, false);
+		context.stroke();
+		context.fill();
+	}
 	context.fillStyle = "black";
 	context.font="20px Calibri";
 
-	context.fillText(lvl,x-5,y+5);
+	context.fillText(lvl, x-5, y+5);
 }
 
 var StartButton = function()
@@ -65,6 +65,8 @@ var StartButton = function()
 	context.font="70px Calibri";
 	context.fillText("GO!",145,420);
 }
+
+// draws the initial splash screen
 function startScreen()
 {
 	context.clearRect(0,0,400,600);
@@ -75,8 +77,8 @@ function startScreen()
 	context.fillText("High Score:  " + getHighScore(), 65, 150);	
 	
 
-	lvl1 = new LevelButton(1,220, 240);
-	lvl2 = new LevelButton(2,300, 240);
+	lvl1 = new LevelButton(1,220, 240, true);
+	lvl2 = new LevelButton(2,300, 240, false);
 
 	context.fillStyle = "white";
 	context.font = "35px Calibri";
@@ -84,22 +86,60 @@ function startScreen()
 
 	start = new StartButton();
 
-	window.setTimeout(drawFrame, 10000);
+	window.setTimeout(getHighScore(), 10000);
 	
 }
 
-function getPosition(event) {
-    var x = event.offsetX;
-    var y = event.offsetY;
-    if (isPaused)
-        return;
-    console.log(bugs.length);
-    for (i = 0; i < bugs.length; i++) {
-        var hit = bugs[i].checkPosition(x, y, 30);
-        if (!hit)
-            // http://www.w3schools.com/jsref/jsref_splice.asp
-            bugs.splice(i, 1);
-    }
+// handles mouse events on main canvas based on different game states
+function getPosition(event) 
+{
+	var x = event.offsetX;
+	var y = event.offsetY;
+	switch(state)
+	{
+		case "playing":	
+		    if (isPaused)
+		        return;
+		    console.log(bugs.length);
+		    for (i = 0; i < bugs.length; i++) {
+		        var hit = bugs[i].checkPosition(x, y, 30);
+		        if (!hit)
+		            // http://www.w3schools.com/jsref/jsref_splice.asp
+		            bugs.splice(i, 1);
+		    }
+		    break;
+		case "start":
+			console.log(x + " " + y);
+			//check lvl2 button (probably better way to do this)
+			var dx = x - 300;
+        	var dy = y - 240;
+        	if (dx * dx + dy * dy <= 225) 
+        	{
+            	console.log("Inn button");
+            	lvl2 = new LevelButton(2,300, 240, true);
+            	lvl1 = new LevelButton(1,220, 240, false);
+            	isLevel1 = false;
+            }
+
+            //check lvl1 button...
+            dx = x - 220;
+        	dy = y - 240;
+        	if (dx * dx + dy * dy <= 225) 
+        	{
+            	console.log("Inn button");
+            	lvl2 = new LevelButton(2,300, 240, false);
+            	lvl1 = new LevelButton(1,220, 240, true);
+            	isLevel1 = true;
+            }
+
+            //check start button  100,350, 200, 100
+            if ((x > 100) && (x < 300) && (y > 350) && (y < 450))
+            {
+            	state = "playing";
+            	drawStartCanvas();
+            }
+			break;
+	}
 }
 
 // check what direction the bugs are supposed to be heading, and redirect them as needed
@@ -127,9 +167,7 @@ function checkDirections()
 			{
 				min[i] = [c, j];
 				//checkCollision(i, min[i][1]); // its more efficient to call this here/////
-			}
-			
-			 	
+			}	
 		}
 
 		// now get the slope y = mx +b
@@ -141,7 +179,6 @@ function checkDirections()
 
 		// see if this bug (i) is touching its closest food
 		checkCollision(i,min[i]);
-
 	}
 }
 
