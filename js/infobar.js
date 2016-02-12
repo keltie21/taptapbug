@@ -1,11 +1,8 @@
 // JavaScript source code
-
 var timer = -1;
 var score = 0;
 var isPaused = false;
 var pButton = new Object();
-var isLevel1 = true;
-var levelSpeed = 0;
 
 // bar init function
 function drawBar()
@@ -143,7 +140,8 @@ function newHighScore(score) {
 
 function gameOver() {
     isPaused = true;
-    gameover = true;
+    state = "end"
     clearInterval(myTimer);
     newHighScore(score);
+    endScreen("won");
 }

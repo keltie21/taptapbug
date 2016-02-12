@@ -5,6 +5,7 @@ gameover = false;
 state = "start"
 var isLevel1 = true;
 var levelSpeed = 0;
+spawnOnce = false;
 
 // catch all for startup items
 function init()
@@ -13,7 +14,6 @@ function init()
 	context = canvas.getContext('2d');
 	canvas.addEventListener("mousedown", getPosition, false);
 
-	setInfo();
 	startScreen();
 }
 function drawStartCanvas()
@@ -31,12 +31,22 @@ function drawStartCanvas()
     	bugs[i].makeBug();
     }
 
-    drawFrame(); 
-
+    drawFrame();
 }
-function getHighScore()
+function getHighScore(lvl)
 {
-	return "1337";
+	if (lvl && localStorage.level1HiScore)
+	{
+		return localStorage.level1HiScore;
+	}
+	else if (!lvl && localStorage.level2HiScore)
+	{
+		return localStorage.level2HiScore;
+	}
+	else
+	{
+		return "N/A";
+	}
 }
 var LevelButton = function(lvl, x, y, selected)
 {
@@ -74,7 +84,7 @@ function startScreen()
 
 	context.fillStyle = "white";
 	context.font="35px Calibri";
-	context.fillText("High Score:  " + getHighScore(), 65, 150);	
+	context.fillText("High Score:  " + getHighScore(isLevel1), 65, 150);	
 	
 
 	lvl1 = new LevelButton(1,220, 240, true);
@@ -85,9 +95,6 @@ function startScreen()
 	context.fillText("LEVEL:", 65, 250);
 
 	start = new StartButton();
-
-	window.setTimeout(getHighScore(), 10000);
-	
 }
 
 // handles mouse events on main canvas based on different game states
@@ -109,14 +116,13 @@ function getPosition(event)
 		    }
 		    break;
 		case "start":
-			console.log(x + " " + y);
+			//console.log(x + " " + y);
 			//check lvl2 button (probably better way to do this)
 			var dx = x - 300;
         	var dy = y - 240;
         	if (dx * dx + dy * dy <= 225) 
         	{
-            	console.log("Inn button");
-            	lvl2 = new LevelButton(2,300, 240, true);
+               	lvl2 = new LevelButton(2,300, 240, true);
             	lvl1 = new LevelButton(1,220, 240, false);
             	isLevel1 = false;
             }
@@ -126,7 +132,6 @@ function getPosition(event)
         	dy = y - 240;
         	if (dx * dx + dy * dy <= 225) 
         	{
-            	console.log("Inn button");
             	lvl2 = new LevelButton(2,300, 240, false);
             	lvl1 = new LevelButton(1,220, 240, true);
             	isLevel1 = true;
@@ -136,9 +141,18 @@ function getPosition(event)
             if ((x > 100) && (x < 300) && (y > 350) && (y < 450))
             {
             	state = "playing";
+            	setInfo();
             	drawStartCanvas();
             }
 			break;
+		case "end":
+			if ((x > 100) && (x < 300) && (y > 350) && (y < 450))
+            {
+            	state = "playing";
+            	setInfo();
+            	drawStartCanvas();
+            }
+            break;
 	}
 }
 
@@ -203,7 +217,10 @@ function spawnBug()
         }
     }
     nextBugTime = Math.floor(Math.random() * 2000) + 1000; // milliseconds between 1s and 2s
-    setTimeout(spawnBug, nextBugTime);
+    if(!spawnOnce)
+    {
+    	setTimeout(spawnBug, nextBugTime);
+    }
 }
 
 function moveBugs()
@@ -239,7 +256,7 @@ function drawFrame(timestamp)
     moveBugs();  //move the bugs
 
     // paint all the food to the screen
-    if(foods.length == 0)
+    if(foods.length == 0 || timer == 0)
     {
         gameOver();
     }
@@ -255,19 +272,6 @@ function drawFrame(timestamp)
         }
         window.requestAnimationFrame(drawFrame);
     }
-        
-    /*else
-    {
-    	if (!isPaused)
-    	{
-    		window.requestAnimationFrame(drawFrame);
-    	}
-    	else
-    	{
-    		pauseGame();
-    	}
-    }*/
-	
 }
 
 // check if bug's head is touching food
@@ -301,21 +305,43 @@ function checkCollision(bug,food)
 	// c- food is always the same size
 	// also: i think it makes more sense to call collision when 
 	// the bug's head touches the food, not its antennae
+	// 35 = radius of food (25) plus distance from bug center to head (10)
 
 	if (food[0] < 35)
 	{
 		eatFood(food[1]);
 	}
-
-
 }
 
+function endScreen(died)
+{
+	bugs = []; // reset bugs
+	food = []; // reset foods
+	if(died == "died")
+	{
+		context.fillStyle = "red";
+	}
+	context.clearRect(0,0,400,600);
+	context.fillRect(50,50,300,500);
 
+	context.fillStyle = "white";
+	context.font="35px Calibri";
+	context.fillText("You " + died + "!", 65, 100);
+	context.fillText("Your Score:  " + score, 65, 180);	
+
+	start = new StartButton();
+
+}
 function eatFood(food)
 {
 	console.log("Ate " + food);
 	foods.splice(food, 1);
-	
+	if (foods.length == 0)
+	{
+		state = "end";
+		isPaused = true;
+		endScreen("died");
+	}
 }
 
 //overlays a grid on the screen, for debug purposes
