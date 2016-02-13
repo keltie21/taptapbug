@@ -4,6 +4,7 @@ var Bug = function (x, y, colour, direction)
     this.x = x;
     this.y = y;
     this.colour = colour;
+    this.alpha = 1.0;
     this.direction = direction;
     this.active = false;
     // speed is based on colour
@@ -21,9 +22,12 @@ var Bug = function (x, y, colour, direction)
     }
 
     // Painting one bug
-    this.makeBug = function (){
-        alpha = "1.0"; 
-        context.globalAlpha = alpha;
+    this.makeBug = function () {
+
+        // save context pre-rotate
+        context.save();
+
+        context.globalAlpha = this.alpha;
     
         //pulled from bug drawing sequence
         bugWidth = 10;
@@ -33,7 +37,7 @@ var Bug = function (x, y, colour, direction)
         radians = this.direction - Math.PI/2;
 
         // save context pre-rotate
-        context.save();
+       // context.save();
     
         // center on bug's center point (so rotate is clean)
         context.translate( this.x + (bugWidth/2), this.y +(bugHeight/2)); 
@@ -128,4 +132,11 @@ var Bug = function (x, y, colour, direction)
         }
         return this.active;
     }
+
+    this.fadeOut = function () {
+        this.alpha -= 0.0083;
+        this.alpha = (this.alpha < 0) ? 0 : this.alpha;
+        return this.alpha;
+    }
+
 }

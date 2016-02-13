@@ -1,5 +1,6 @@
 var canvas = new Object();
 var bugs = new Array();
+var dead = new Array();
 var foods = new Array();
 gameover = false;
 state = "start"
@@ -110,9 +111,13 @@ function getPosition(event)
 		    console.log(bugs.length);
 		    for (i = 0; i < bugs.length; i++) {
 		        var hit = bugs[i].checkPosition(x, y, 30);
-		        if (!hit)
-		            // http://www.w3schools.com/jsref/jsref_splice.asp
+		        if (!hit) {
+		            // http://www.w3schools.com/js/js_array_methods.asp
+		            dead.push(bugs[i]);
 		            bugs.splice(i, 1);
+		            
+		        }
+		        console.log("dead: " + dead.length);
 		    }
 		    break;
 		case "start":
@@ -269,6 +274,13 @@ function drawFrame(timestamp)
         for (i = 0; i < bugs.length; i++)
         {
             bugs[i].makeBug();
+        }
+        for (i = 0; i < dead.length; i++) {
+            var a = dead[i].fadeOut();
+            if (a <= 0)
+                dead.splice(i, 1);
+            else
+                dead[i].makeBug();
         }
         window.requestAnimationFrame(drawFrame);
     }
