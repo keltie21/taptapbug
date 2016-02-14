@@ -7,17 +7,20 @@ var Bug = function (x, y, colour, direction)
     this.alpha = 1.0;
     this.direction = direction;
     this.active = false;
+    this.collState = ["none", null];
+    this.isSlow = 2; // means false here
+
     // speed is based on colour
     switch(colour)
     {
         case "orange":
-            this.speed = 1 * levelSpeed;    //60 fps / 60 fs
+            this.speed = 1 * levelSpeed * (this.isSlow * 1 / 2);    //60 fps / 60 fs
             break;
         case "red":
-            this.speed = 1.25 * levelSpeed; //75 fps / 60 fs
+            this.speed = 1.25 * levelSpeed * (this.isSlow * 1 / 2); //75 fps / 60 fs
             break;
         case "black":
-            this.speed = 2.5 * levelSpeed;  //150fps / 60 fs
+            this.speed = 2.5 * levelSpeed * (this.isSlow * 1 / 2);  //150fps / 60 fs
             break;
     }
 
@@ -61,7 +64,7 @@ var Bug = function (x, y, colour, direction)
         context.lineTo(10, 40);
         context.moveTo(10, 20);
         context.lineTo(0, 40);
-        context.lineWidth = 2;
+        context.lineWidth = 2.5;
         context.strokeStyle = colour;
         context.stroke(); 
 
@@ -120,12 +123,29 @@ var Bug = function (x, y, colour, direction)
         context.restore();
 
         this.active = true;
+        
+        /*if (this.collState[0] = "slow")
+            this.collState[0] = "none";
+
+        if (this.collState[0] = "wait")
+            this.isSlow = 0;
+        else
+            this.isSlow = 2;*/
+
+        console.log("hey: " + this.collState[0]);
+
+        /*if (this.collState[0] == "left" || this.collState[0] == "right")
+            this.isSlow = 1;
+        else
+            this.isSlow = 2;*/
     }
+
     //http://stackoverflow.com/questions/20814883/add-an-event-listener-to-a-drawn-object-on-html5-canvas
     this.checkPosition = function (x, y, r){
         var dx = x - this.x;
         var dy = y - this.y;
-        if (dx * dx + dy * dy <= r * r && this.active) {
+        var dr = r + 20;
+        if (dx * dx + dy * dy <= dr * dr && this.active) {
             addScore(this.colour);
             console.log("Click: " + score);
             this.active = false;
@@ -138,5 +158,14 @@ var Bug = function (x, y, colour, direction)
         this.alpha = (this.alpha < 0) ? 0 : this.alpha;
         return this.alpha;
     }
+
+    this.getSpeed = function () {
+        return this.speed;
+    }
+
+    this.getPos = function () {
+        return [this.x, this.y];
+    }
+   
 
 }

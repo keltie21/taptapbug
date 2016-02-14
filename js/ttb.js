@@ -200,12 +200,43 @@ function checkDirections()
 			}	
 		}
 
+		for (k = 0; k < bugs.length; k++) {
+		    if (i != k) {
+		        if (bugs[i].collState[0] = "none")
+		            checkOverlap(bugs[i], bugs[k]);
+		        else {
+		            var kX = bugs[i].x - bugs[k].x;
+		            var kY = bugs[i].y - bugs[k].y;
+
+		            var cX = bugs[i].x - bugs[i].collState[1].x;
+		            var cY = bugs[i].y - bugs[i].collState[1].y;
+		            
+		            if (kX * kX + kY * kY < cX * cX + cY * cY)
+		                checkOverlap(bugs[i], bugs[k]);
+		        }
+		    }
+		}
+
+	    //var targetY = (foods[min[i][1]].y + 25);
+		var targetY = (bugs[i].collState[0] != "shift") ? (foods[min[i][1]].y + 25) : (bugs[i].collState[1].y + 40);
+		var targetX = (bugs[i].collState[0] != "shift") ? (foods[min[i][1]].x + 25) : (bugs[i].collState[1].x + 40);
+
+
 		// now get the slope y = mx +b
-		dY = (bugs[i].y + 20) - (foods[min[i][1]].y + 25);  // these offsets should probably
-		dX = (bugs[i].x + 5) - (foods[min[i][1]].x + 25);	// be variables...
+		dY = (bugs[i].y + 20) - targetY;  // these offsets should probably
+		dX = (bugs[i].x + 5) - targetX;	// be variables...
+
+		var shift = 1;
+
+		if (bugs[i].collState[0] == "shift")
+		    shift = -1;
 		
 		// angle the bug
-		bugs[i].direction = Math.atan2(dY, dX); 
+		bugs[i].direction = Math.atan2(dY, shift * dX);
+
+		//console.log("Check it, " + bugs[i] + bugs[i].collState[0]);
+
+		
 
 		// see if this bug (i) is touching its closest food
 		checkCollision(i,min[i]);
@@ -215,7 +246,7 @@ function checkDirections()
 //generate a bug, and determine how long until next bug
 function spawnBug() 
 {
-    if (!isPaused) {
+    if (!isPaused && state == "playing") {
         whichBug = [1, 1, 1, 1, 2, 2, 2, 3, 3, 3]; //0.4 prob type 1 (orange); 0.3 type 2 (red); 0.3 prob type 3 (black);
         i = Math.floor(Math.random() * 10) // pick an index
         x = Math.floor(Math.random() * 380) + 10; // x coordinate between 10 and 390
@@ -232,7 +263,7 @@ function spawnBug()
                 break;
         }
     }
-    nextBugTime = Math.floor(Math.random() * 2000) + 1000; // milliseconds between 1s and 2s
+    nextBugTime = Math.floor(Math.random() * 3000) + 1000; // milliseconds between 1s and 2s
     if(!spawnOnce)
     {
     	setTimeout(spawnBug, nextBugTime);
@@ -246,8 +277,11 @@ function moveBugs()
 	//SOH CAH TOA FTW
 	for(i = 0; i < bugs.length; i++)
 	{
-		bugs[i].x -= Math.cos(bugs[i].direction) * bugs[i].speed;
-		bugs[i].y -= Math.sin(bugs[i].direction) * bugs[i].speed;
+	    if (bugs[i].collState[0] != "wait") {
+	        bugs[i].x -= Math.cos(bugs[i].direction) * bugs[i].speed;
+	        bugs[i].y -= Math.sin(bugs[i].direction) * bugs[i].speed;
+	    }
+		
 	}
 }
 
@@ -336,10 +370,77 @@ function checkCollision(bug,food)
 	}
 }
 
+function checkOverlap(bug1, bug2) {
+    var b1p = bug1.getPos();
+    var b2p = bug2.getPos();
+
+    var b1s = bug1.getSpeed();
+    var b2s = bug2.getSpeed();
+
+    var dx = b1p[0] - b2p[0];
+    var dy = b1p[1] - b2p[1];
+
+    if (dx * dx + dy * dy > 41 * 41) {
+        if (bug1.collState[1] = bug2)
+            bug1.collState = ["none", null];
+        if (bug2.collState[1] = bug1)
+            bug2.collState = ["none", null];
+    }
+    else {
+        if (b1s == b2s) {
+           if (b1p[0] > b2p[0] && b1p[1] > b2p[1])
+                bug2.collState = ["wait", bug1];
+            else if (b1p[0] > b2p[0] && b1p[1] < b2p[1]) {
+                bug2.collState = ["shift", bug1];
+                bug1.collState = ["wait", bug2];
+            } else if (b1p[0] < b2p[0] && b1p[1] < b2p[1]) {
+                bug1.collState = ["shift", bug2];
+                bug2.collState = ["wait", bug1];
+            } else if (b1p[0] < b2p[0] && b1p[1] > b2p[1])
+                bug1.collState = ["wait", bug2];
+        }
+        else if (b1s > b2s) {
+            if (b1p[0] > b2p[0] && b1p[1] > b2p[1])
+                bug2.collState = ["wait", bug1];
+            else if (b1p[0] > b2p[0] && b1p[1] < b2p[1]) {
+                bug2.collState = ["shift", bug1];
+                bug1.collState = ["wait", bug2];
+            } else if (b1p[0] < b2p[0] && b1p[1] < b2p[1]) {
+                bug2.collState = ["shift", bug1];
+                bug1.collState = ["wait", bug2];
+            } else if (b1p[0] < b2p[0] && b1p[1] > b2p[1])
+                bug2.collState = ["shift", bug1];
+        } else {
+            if (b1p[0] > b2p[0] && b1p[1] > b2p[1])
+                bug1.collState = ["shift", bug2];
+            else if (b1p[0] > b2p[0] && b1p[1] < b2p[1]) {
+                bug2.collState = ["shift", bug1];
+                bug1.collState = ["wait", bug2];
+            } else if (b1p[0] < b2p[0] && b1p[1] < b2p[1]) {
+                bug2.collState = ["shift", bug1];
+                bug1.collState = ["wait", bug2];
+            } else if (b1p[0] < b2p[0] && b1p[1] > b2p[1])
+                bug1.collState = ["wait", bug2];
+        }
+
+    }
+    
+
+    /*if (dx * dx + dy * dy > 41 * 41) { // the 'radius' of a bug is 20px, so need to ensure there is no overlap
+        bug1.collState = "none";
+        bug2.collState = "none";
+    } else {
+        
+    }*/
+
+    console.log(bug1.collState[0], bug2.collState[0]);
+}
+
 function endScreen(died)
 {
 	bugs = []; // reset bugs
 	food = []; // reset foods
+	dead = [];
 	if(died == "died")
 	{
 	    context.fillStyle = "red";
@@ -386,3 +487,4 @@ function _grid()
 		context.stroke();
 	}
 }
+
