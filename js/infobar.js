@@ -46,7 +46,7 @@ var PauseButton = function()
     this.r = 20;
 
     this.undraw = function () {
-        console.log("erase");
+        //console.log("erase");
         barContext.clearRect(150, 0, 100, 50);
         barContext.clearRect(0, 0, 150, 50);
         barContext.clearRect(300, 0, 100, 50);
@@ -127,7 +127,7 @@ function addScore(colour) {
 function countdown() {
     if (!isPaused)
         timer--;
-    console.log("Time: " + timer);
+    //console.log("Time: " + timer);
     drawTime();
 }
 

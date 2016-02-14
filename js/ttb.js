@@ -6,7 +6,9 @@ gameover = false;
 state = "start"
 var isLevel1 = true;
 var levelSpeed = 0;
-spawnOnce = false;
+
+var spawners = 1;
+
 
 // catch all for startup items
 function init()
@@ -120,7 +122,7 @@ function getPosition(event)
 		            bugs.splice(i, 1);
 		            
 		        }
-		        console.log("dead: " + dead.length);
+		        //console.log("dead: " + dead.length);
 		    }
 		    break;
 		case "start":
@@ -263,11 +265,13 @@ function spawnBug()
                 break;
         }
     }
-    nextBugTime = Math.floor(Math.random() * 3000) + 1000; // milliseconds between 1s and 2s
-    if(!spawnOnce)
-    {
-    	setTimeout(spawnBug, nextBugTime);
+    
+    if (state == "playing") {
+        nextBugTime = Math.floor(Math.random() * (3000 - 1000)) + 1000; // milliseconds between 1s and 3s
+        setTimeout(spawnBug, nextBugTime);
     }
+        
+    
 }
 
 function moveBugs()
@@ -380,14 +384,50 @@ function checkOverlap(bug1, bug2) {
     var dx = b1p[0] - b2p[0];
     var dy = b1p[1] - b2p[1];
 
-    if (dx * dx + dy * dy > 41 * 41) {
-        if (bug1.collState[1] = bug2)
+    if (dx * dx + dy * dy > 50 * 50) {
+        if (bug1.collState[1] == bug2)
             bug1.collState = ["none", null];
-        if (bug2.collState[1] = bug1)
+        if (bug2.collState[1] == bug1)
             bug2.collState = ["none", null];
     }
     else {
+        //if (bug1.collState[1] == bug2 && bug2.collState[1] == bug1)
+          //  return;
         if (b1s == b2s) {
+            if (b1p[0] > b2p[0]) {
+                bug2.collState = ["shift", bug1];
+                bug1.collState = ["wait", bug2];
+            }
+            else if (b1p[0] > b2p[0]) {
+                bug1.collState = ["shift", bug2];
+                bug2.collState = ["wait", bug1];
+            }
+            else if (b1p[1] < b2p[1])
+                bug1.collState = ["wait", bug2];
+            else
+                bug2.collState = ["wait", bug1];
+        }
+        else if (b1s > b2s) {
+            if (b1p[1] > b2p[1]) {
+                //bug1.collState = ["shift", bug2];
+                bug2.collState = ["wait", bug1];
+            }
+            else {
+                bug2.collState = ["shift", bug1];
+                bug1.collState = ["wait", bug2];
+            }
+        }
+        else {
+            if (b1p[1] > b2p[1]) {
+                bug1.collState = ["shift", bug2];
+                bug2.collState = ["wait", bug1];
+            }
+            else {
+                //bug2.collState = ["shift", bug1];
+                bug1.collState = ["wait", bug2];
+            }
+        }
+        /*if (b1s == b2s) {
            if (b1p[0] > b2p[0] && b1p[1] > b2p[1])
                 bug2.collState = ["wait", bug1];
             else if (b1p[0] > b2p[0] && b1p[1] < b2p[1]) {
@@ -408,11 +448,16 @@ function checkOverlap(bug1, bug2) {
             } else if (b1p[0] < b2p[0] && b1p[1] < b2p[1]) {
                 bug2.collState = ["shift", bug1];
                 bug1.collState = ["wait", bug2];
-            } else if (b1p[0] < b2p[0] && b1p[1] > b2p[1])
+            } else if (b1p[0] < b2p[0] && b1p[1] > b2p[1]) {
                 bug2.collState = ["shift", bug1];
+                bug1.collState = ["wait", bug2];
+            }
+                
         } else {
-            if (b1p[0] > b2p[0] && b1p[1] > b2p[1])
+            if (b1p[0] > b2p[0] && b1p[1] > b2p[1]){
                 bug1.collState = ["shift", bug2];
+                bug2.collState = ["shift", bug1];
+            }
             else if (b1p[0] > b2p[0] && b1p[1] < b2p[1]) {
                 bug2.collState = ["shift", bug1];
                 bug1.collState = ["wait", bug2];
@@ -421,7 +466,7 @@ function checkOverlap(bug1, bug2) {
                 bug1.collState = ["wait", bug2];
             } else if (b1p[0] < b2p[0] && b1p[1] > b2p[1])
                 bug1.collState = ["wait", bug2];
-        }
+        }*/
 
     }
     
@@ -433,7 +478,7 @@ function checkOverlap(bug1, bug2) {
         
     }*/
 
-    console.log(bug1.collState[0], bug2.collState[0]);
+    //console.log(bug1.collState[0], bug2.collState[0]);
 }
 
 function endScreen(died)

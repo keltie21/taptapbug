@@ -132,7 +132,7 @@ var Bug = function (x, y, colour, direction)
         else
             this.isSlow = 2;*/
 
-        console.log("hey: " + this.collState[0]);
+       // console.log("hey: " + this.collState[0]);
 
         /*if (this.collState[0] == "left" || this.collState[0] == "right")
             this.isSlow = 1;
