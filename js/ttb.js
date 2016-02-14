@@ -17,6 +17,7 @@ function init()
 
 	startScreen();
 }
+
 function drawStartCanvas()
 {
 	drawBar();
@@ -34,6 +35,7 @@ function drawStartCanvas()
 
     drawFrame();
 }
+
 function getHighScore(lvl)
 {
 	if (lvl && localStorage.level1HiScore)
@@ -49,6 +51,7 @@ function getHighScore(lvl)
 		return "N/A";
 	}
 }
+
 var LevelButton = function(lvl, x, y, selected)
 {
 	context.fillStyle = "white";
@@ -88,8 +91,8 @@ function startScreen()
 	context.fillText("High Score:  " + getHighScore(isLevel1), 65, 150);	
 	
 
-	lvl1 = new LevelButton(1,220, 240, true);
-	lvl2 = new LevelButton(2,300, 240, false);
+	lvl1 = new LevelButton(1,220, 240, isLevel1);
+	lvl2 = new LevelButton(2,300, 240, !isLevel1);
 
 	context.fillStyle = "white";
 	context.font = "35px Calibri";
@@ -127,9 +130,8 @@ function getPosition(event)
         	var dy = y - 240;
         	if (dx * dx + dy * dy <= 225) 
         	{
-               	lvl2 = new LevelButton(2,300, 240, true);
-            	lvl1 = new LevelButton(1,220, 240, false);
-            	isLevel1 = false;
+               	isLevel1 = false;
+            	startScreen();
             }
 
             //check lvl1 button...
@@ -137,25 +139,34 @@ function getPosition(event)
         	dy = y - 240;
         	if (dx * dx + dy * dy <= 225) 
         	{
-            	lvl2 = new LevelButton(2,300, 240, false);
-            	lvl1 = new LevelButton(1,220, 240, true);
             	isLevel1 = true;
+            	startScreen();
             }
 
             //check start button  100,350, 200, 100
             if ((x > 100) && (x < 300) && (y > 350) && (y < 450))
             {
-            	state = "playing";
+                state = "playing";
+                isLevel1 = true;
             	setInfo();
             	drawStartCanvas();
             }
 			break;
 		case "end":
 			if ((x > 100) && (x < 300) && (y > 350) && (y < 450))
-            {
-            	state = "playing";
-            	setInfo();
-            	drawStartCanvas();
+			{
+			    if (isLevel1 && !gameover) {
+			        state = "playing";
+			        isLevel1 = false;
+			        setInfo();
+			        drawStartCanvas();
+			    }
+			    else {
+			        state = "start";
+			        isLevel1 = true;
+			        pButton.undraw();
+			        startScreen();
+			    }
             }
             break;
 	}
@@ -261,10 +272,10 @@ function drawFrame(timestamp)
     moveBugs();  //move the bugs
 
     // paint all the food to the screen
-    if(foods.length == 0 || timer == 0)
-    {
-        gameOver();
-    }
+    if(foods.length == 0)
+        gameOver("died");
+    else if (timer == 0)
+        gameOver("won");
     else {
         for (i = 0; i < foods.length; i++)
         {
@@ -331,7 +342,8 @@ function endScreen(died)
 	food = []; // reset foods
 	if(died == "died")
 	{
-		context.fillStyle = "red";
+	    context.fillStyle = "red";
+	    gameover = true;
 	}
 	context.clearRect(0,0,400,600);
 	context.fillRect(50,50,300,500);

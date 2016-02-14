@@ -45,8 +45,16 @@ var PauseButton = function()
     this.y = 25;
     this.r = 20;
 
+    this.undraw = function () {
+        console.log("erase");
+        barContext.clearRect(150, 0, 100, 50);
+        barContext.clearRect(0, 0, 150, 50);
+        barContext.clearRect(300, 0, 100, 50);
+    }
+
     this.redraw = function () {
         barContext.clearRect(150, 0, 100, 50);
+        
         if (isPaused) {
             barContext.fillStyle = "red";
         }
@@ -121,9 +129,6 @@ function countdown() {
         timer--;
     console.log("Time: " + timer);
     drawTime();
-    if (timer == 0) {
-        gameOver();
-    }
 }
 
 function pauseGame() {
@@ -138,10 +143,10 @@ function newHighScore(score) {
     console.log("Hi-score: " + localStorage.level2HiScore);
 }
 
-function gameOver() {
+function gameOver(died) {
     isPaused = true;
     state = "end"
     clearInterval(myTimer);
     newHighScore(score);
-    endScreen("won");
+    endScreen(died);
 }
